@@ -115,6 +115,8 @@ mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   #注意：对应实体类的路径
   type-aliases-package: com.layui.pojo
+  configuration:
+    call-setters-on-nulls: true
 mapper:
   mappers:
   - tk.mybatis.springboot.util.MyMapper

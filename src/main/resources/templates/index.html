@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>主页</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/layui/myicon/iconfont.css" type="text/css">
+    <style type="text/css">
+        #adminNavMenu .layui-icon {
+            margin-right: 5px;
+        }
+
+        .layadmin-side-shrink .layui-side-scroll .layui-nav {
+            position: static;
+            width: 60px;
+        }
+
+        .layadmin-side-shrink .layui-side {
+            left: 0;
+            width: 60px;
+        }
+
+        .layui-side {
+            transition: all .3s;
+            -webkit-transition: all .3s;
+        }
+
+        .layadmin-side-shrink .layui-side-scroll .layui-nav-item > a {
+            padding-right: 0;
+        }
+
+        .layadmin-side-shrink .layui-side-scroll .layui-nav-item cite {
+            display: none;
+        }
+
+        .layadmin-side-shrink .layui-side-scroll .layui-nav > .layui-nav-item > a .layui-nav-more {
+            display: none;
+        }
+
+        .layadmin-side-shrink .layui-body {
+            left: 60px;
+        }
+
+        .layui-body {
+            transition: all .3s;
+            -webkit-transition: all .3s;
+            background-color: #F2F2F2;
+        }
+
+        .layui-tab-title .layui-this {
+            background-color: #F2F2F2;
+        }
+
+        .layui-tab {
+            margin: 0px 0;
+        }
+
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fff;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1);
+        }
+
+        .layadmin-pagetabs {
+            position: fixed;
+            top: 50px;
+            right: 0;
+            z-index: 999;
+            left: 200px;
+            transition: all .3s;
+            -webkit-transition: all .3s;;
+        }
+
+        .layadmin-side-shrink .layadmin-pagetabs {
+            left: 60px;
+        }
+
+        .layadmin-pagetabs .layui-icon-prev {
+            left: 0;
+            border-left: none;
+            border-right: 1px solid #f6f6f6;
+        }
+
+        .layadmin-pagetabs .layadmin-tabs-control {
+            position: absolute;
+            top: 0;
+            width: 40px;
+            height: 100%;
+            text-align: center;
+            cursor: pointer;
+            transition: all .3s;
+            -webkit-transition: all .3s;
+            box-sizing: border-box;
+            border-left: 1px solid #f6f6f6;
+        }
+
+        [layadmin-event] {
+            cursor: pointer;
+        }
+
+        .layadmin-pagetabs .layui-icon-next {
+            right: 40px;
+        }
+
+        .layadmin-pagetabs .layui-icon-down {
+            right: 0;
+        }
+
+        .layadmin-pagetabs .layui-tab {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .layadmin-pagetabs .layui-tab-title {
+            height: 40px;
+            border: none;
+        }
+
+        .layadmin-pagetabs .layui-tab-title li:first-child {
+            padding-right: 15px;
+        }
+
+        .layadmin-pagetabs .layui-tab-title li {
+            min-width: 0;
+            line-height: 40px;
+            max-width: 160px;
+            text-overflow: ellipsis;
+            /*  padding-right: 40px;*/
+            overflow: hidden;
+            border-right: 1px solid #f6f6f6;
+            vertical-align: top;
+        }
+
+        .layadmin-tabs-select.layui-nav {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            background: 0 0;
+        }
+
+        .layadmin-tabs-select.layui-nav .layui-nav-item {
+            line-height: 40px;
+        }
+
+        .layadmin-tabs-select.layui-nav .layui-nav-item a {
+            color: #666;
+        }
+
+        .layadmin-tabs-select.layui-nav .layui-nav-item > a {
+            height: 40px;
+        }
+
+        .layadmin-tabs-select.layui-nav .layui-nav-child {
+            top: 40px;
+            left: auto;
+            right: 0;
+        }
+
+        .layui-layout-admin .layui-body {
+            position: fixed;
+            top: 90px;
+            bottom: 0;
+        }
+
+    </style>
+</head>
+<body class="layui-layout-body">
+<div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <!--头部区域-->
+            <div class="layui-logo">layui后台布局</div>
+            <ul class="layui-nav layui-layout-right" lay-filter="test">
+                <li class="layui-nav-item">
+                    <a href="javascript:void(0);" lay-href="/page/myMsgCenter"
+                       layadmin-event="message" lay-text="消息中心" title="消息中心">
+                        <i class="layui-icon layui-icon-notice"></i>
+                        <!--如果有消息则显示小圆点-->
+                        <span class="layui-badge-dot"></span>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs">
+                    <a href="javascript:void(0);"
+                       layadmin-event="message" lay-text="主题" title="主题">
+                        <i class="layui-icon layui-icon-theme"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs"><a lay-href="/page/myInfo">个人中心<span
+                        class="layui-badge-dot"></span></a></li>
+                <li class="layui-nav-item" lay-unselect><a
+                        lay-href="null"><img src="//t.cn/RCzsdCq"
+                                             class="layui-nav-img"/>我</a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a lay-href="/page/myInfo">修改信息</a>
+                        </dd>
+                        <dd>
+                            <a lay-href="null">安全管理</a>
+                        </dd>
+                        <dd>
+                            <a href="/logout" lay-href="null">退了</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-hide-xs">
+                    <a href="javascript:void(0);" layadmin-event="about"><i
+                            class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item layadmin-flexible" lay-unselect="">
+                    <a href="javascript:void(0);" layadmin-event="flexible" title="侧边伸缩">
+                        <i class="layui-icon layui-icon-spread-left" id="LAY_app_flexible"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs"><a href="">最新活动</a></li>
+                <li class="layui-nav-item" lay-unselect="" id="refresh">
+                    <a href="javascript:;" layadmin-event="refresh" title="刷新">
+                        <i class="layui-icon layui-icon-refresh-3"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item"><a href="javascript:void(0);" id="weather" lay-unselect="">
+                    <i class="layui-icon layui-icon-tianqi"></i></a></li>
+                <li class="layui-nav-item layui-hide-xs"><a href="">社区</a></li>
+            </ul>
+        </div>
+        <!--侧边导航栏-->
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航）lay-shrink="all"是否收缩兄弟节点已展开的子菜单 -->
+                <ul class="layui-nav layui-nav-tree " lay-filter="test" id="adminNavMenu" lay-shrink="all">
+                </ul>
+            </div>
+        </div>
+        <div class="layadmin-pagetabs" id="LAY_app_tabs">
+            <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-down">
+                <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav"
+                    id="layadmin-pagetabs-nav">
+                    <li class="layui-nav-item" lay-unselect="">
+                        <a href="javascript:;"><span class="layui-nav-more"></span></a>
+                        <dl class="layui-nav-child layui-anim-fadein layui-anim layui-anim-upbit">
+                            <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                            <dd layadmin-event="closeOtherTabs" class=""><a href="javascript:;">关闭其它标签页</a></dd>
+                            <dd layadmin-event="closeAllTabs" class=""><a href="javascript:;">关闭全部标签页</a></dd>
+                        </dl>
+                    </li>
+                    <span class="layui-nav-bar" style="left: 20px; top: 35px; width: 0px; opacity: 0;"></span></ul>
+            </div>
+            <div class="layui-tab" lay-filter="tabs" lay-allowclose="true">
+                <ul class="layui-tab-title" style="background-color: #fff">
+                    <li class="layui-this ">首页</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <!--中间主体-->
+        <div class="layui-body" id="container">
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">首页内容</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- 辅助元素，一般用于移动设备下遮罩 -->
+<div class="layadmin-body-shade" layadmin-event="shade"></div>
+
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<!-- 天气插件  https://cj.weather.com.cn -->
+<div id="my-weather">
+    <div id="weather-view-he"></div>
+</div>
+<script type="text/javascript">
+    WIDGET = {ID: 'dSa0lj08z0'};
+    $("#weather").click(function () {
+        $("#my-weather").toggle();
+        if ($(".layui-layout-body").outerWidth() <= 992) {
+            $("#weather-view-he").css("width", $(".layui-layout-body").width() + "px");
+        } else {
+            $("#weather-view-he").css("width", 410 + "px");
+        }
+        $("#weather-view-he").css({"z-index": 100000, "border-radius": 0});
+    });
+
+</script>
+<script type="text/javascript" src="https://apip.weatherdt.com/view/static/js/r.js?v=1111"></script>
+<!-- 天气插件 end -->
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript">
+    /*左侧导航栏自适应*/
+    $("#LAY_app_flexible").click(function () {
+        if ($(".layui-layout-body").outerWidth() <= 992) {
+            if ($(this).hasClass("layui-icon-spread-left")) {
+                $("#LAY_app").addClass("layadmin-side-spread-sm");
+                $(this).addClass("layui-icon-shrink-right").removeClass("layui-icon-spread-left");
+            } else {
+                $("#LAY_app").removeAttr("class");
+                $(this).addClass("layui-icon-spread-left").removeClass("layui-icon-shrink-right");
+            }
+        } else {
+            $("#adminNavMenu li").removeClass("layui-nav-itemed");
+            if ($(this).hasClass("layui-icon-spread-left")) {
+                $("#LAY_app").addClass("layadmin-side-shrink");
+                $(this).addClass("layui-icon-shrink-right").removeClass("layui-icon-spread-left").attr("data", 1);
+            } else {
+                $("#LAY_app").removeAttr("class");
+                $(this).addClass("layui-icon-spread-left").removeClass("layui-icon-shrink-right").removeAttr('data');
+            }
+
+        }
+    });
+    //悬停提示
+    $(document).on('mouseover', '#adminNavMenu li', function () {
+        if ($('#LAY_app_flexible').attr('data') == 1) {
+            var tip = $(this).children('a').children('cite').text();
+            layer.tips(tip, $(this), {
+                tips: [2, 'noto'], time: 2000//还可配置颜色
+            });
+        }
+    });
+    //侧边收缩点击事件
+    $(document).on('click', '#adminNavMenu li', function () {
+        if ($('#LAY_app_flexible').attr('data') == 1) {
+            $("#LAY_app").removeAttr("class");
+            $(this).addClass('layui-nav-itemed');
+            $('#LAY_app_flexible').removeAttr('data').addClass("layui-icon-spread-left").removeClass("layui-icon-shrink-right")
+        }
+    });
+    //关闭tab
+    $("#layadmin-pagetabs-nav").hover(function () {
+        $(this).find('dl').addClass('layui-show');
+    }, function () {
+        $(this).find('dl').removeClass('layui-show');
+    });
+
+
+    //刷新当前页面
+    $("#refresh").on("click", function () {  //此处添加禁止连续点击刷新一是为了降低服务器压力，另外一个就是为了防止超快点击造成chrome本身的一些js文件的报错(不过貌似这个问题还是存在，不过概率小了很多)
+        var obj = $('.layui-tab-content').children(".layui-show").children('iframe#iframepage');
+        var src = obj.attr('src')
+        obj.attr('src', src)
+    });
+
+
+    /*  $(function () {
+          //加载菜单栏
+          navs();
+      });*/
+
+
+    layui.use(['jquery', 'element'], function () {
+        navs();
+        var element = layui.element;
+
+        function navs() {
+            $("#adminNavMenu").empty();
+            $.ajax({
+                url: "/main/navs",
+                dataType: "json",
+                type: "POST",
+                success: function (data) {
+                    // console.log(data);
+                    $.each(data, function (i, item) {
+                        var html = "";
+                        if (i == 0) {
+                            html += '<li class="layui-nav-item layui-nav-itemed">';//layui-nav-itemed显示打开菜单为打开状态
+                        } else {
+                            html += '<li class="layui-nav-item">';
+                        }
+                        html += '<a href="javascript:void(0);" lay-href="' + item.url + '">' +
+                            '<i class="layui-icon ' + item.icon + '"></i>' +
+                            '<cite>' + item.name + '</cite></a>';//目录
+                        if (item.titleNode != "" && item.titleNode.length > 0) {
+                            html += '<dl class="layui-nav-child">';
+                            $.each(item.titleNode, function (j, item2) { //一级菜单
+                                html += '<dd>'
+                                html += '<a href="javascript:void(0);" lay-href="' + item2.url + '">' +
+                                    '<i class="layui-icon ' + item2.icon + '"></i>' +
+                                    '<cite>' + item2.name + '</cite></a>';
+                                if (item2.titleNode != "" && item2.titleNode.length > 0) {
+                                    html += '<ol class="layui-nav-child">';
+                                    $.each(item2.titleNode, function (k, item3) { //二级菜单 暂时没有
+                                        html += '<li>' +
+                                            '<a href="javascript:void(0);" lay-href="' + item3.url + '">' +
+                                            '<i class="layui-icon ' + item3.icon + '"></i>' +
+                                            '<cite>' + item3.name + '</cite>' +
+                                            '</a>' +
+                                            '</li>';
+                                    });
+                                    html += '</ol>';
+                                }
+                            });
+                        }
+                        $("#adminNavMenu").append(html);
+                    });
+                    element.init();
+                }
+            });
+        }
+
+        //初始化动态元素，一些动态生成的元素如果不设置初始化，将不会有默认的动态效果
+
+        //监听切换tab
+        element.on('tab(tabs)', function (data) {
+            var layId = $(this).attr('lay-id');
+            $(this).attr('src', layId);
+
+        });
+        //导航条点击监听，并新增tab， elem当前对象
+        element.on('nav(test)', function (elem) {
+            var title = $(this).text();
+            if ($(this).attr("lay-text") == "消息中心") {
+                title = "消息中心";
+            }
+            var url = $(this).attr('lay-href');
+            tabListeners(title, url);
+        });
+        /**
+         *  新增tab
+         * @param title
+         * @param url
+         */
+        tabListeners = function (title, url) {
+            if (url != "" && url != "null") {//一级标签不加载选项卡
+                // console.log(title);
+                var exist = $("li[lay-id='" + url + "']").length; //判断是否存在tab不存在创建并显示到对应tab,存在则跳转到对应的tab
+                if (exist == 0) {
+                    element.tabAdd('tabs', { //新增选项卡
+                        title: title,
+                        content: '<iframe  frameborder="0" src="' + url + '" class="layadmin-iframe" id="iframepage"></iframe>', //支持传入html
+                        id: url,//lay-id
+                    });
+                    element.tabChange('tabs', url);
+                } else {
+                    element.tabChange('tabs', url);//切换tab
+                }
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>

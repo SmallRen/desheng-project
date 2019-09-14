@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.desheng.mapper.WzPointProductMapper">
+    <resultMap id="BaseResultMap" type="com.desheng.pojo.WzPointProduct">
+        <result column="wz_point_id" jdbcType="INTEGER" property="wzPointId"/>
+        <result column="wz_product_scode" jdbcType="INTEGER" property="wzProductScode"/>
+        <result column="is_default" jdbcType="INTEGER" property="isDefault"/>
+        <result column="sign" jdbcType="VARCHAR" property="sign"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    wz_point_id, wz_product_scode, is_default, sign
+  </sql>
+    <select id="selectByExample" parameterType="com.desheng.pojo.WzPointProductExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from wz_point_product
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <delete id="deleteByExample" parameterType="com.desheng.pojo.WzPointProductExample">
+        delete from wz_point_product
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.desheng.pojo.WzPointProduct">
+    insert into wz_point_product (wz_point_id, wz_product_scode, is_default, 
+      sign)
+    values (#{wzPointId,jdbcType=INTEGER}, #{wzProductScode,jdbcType=INTEGER}, #{isDefault,jdbcType=INTEGER}, 
+      #{sign,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.desheng.pojo.WzPointProduct">
+        insert into wz_point_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="wzPointId != null">
+                wz_point_id,
+            </if>
+            <if test="wzProductScode != null">
+                wz_product_scode,
+            </if>
+            <if test="isDefault != null">
+                is_default,
+            </if>
+            <if test="sign != null">
+                sign,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="wzPointId != null">
+                #{wzPointId,jdbcType=INTEGER},
+            </if>
+            <if test="wzProductScode != null">
+                #{wzProductScode,jdbcType=INTEGER},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault,jdbcType=INTEGER},
+            </if>
+            <if test="sign != null">
+                #{sign,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.desheng.pojo.WzPointProductExample" resultType="java.lang.Long">
+        select count(*) from wz_point_product
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update wz_point_product
+        <set>
+            <if test="record.wzPointId != null">
+                wz_point_id = #{record.wzPointId,jdbcType=INTEGER},
+            </if>
+            <if test="record.wzProductScode != null">
+                wz_product_scode = #{record.wzProductScode,jdbcType=INTEGER},
+            </if>
+            <if test="record.isDefault != null">
+                is_default = #{record.isDefault,jdbcType=INTEGER},
+            </if>
+            <if test="record.sign != null">
+                sign = #{record.sign,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update wz_point_product
+        set wz_point_id = #{record.wzPointId,jdbcType=INTEGER},
+        wz_product_scode = #{record.wzProductScode,jdbcType=INTEGER},
+        is_default = #{record.isDefault,jdbcType=INTEGER},
+        sign = #{record.sign,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <!--根据物资编码查询点位-->
+    <select id="queryWzPointByScode" resultType="java.util.Map">
+        SELECT a.`p_name` as point,b.`is_default`,b.`sign`,c.`wz_scode`,c.`wz_name`,c.`wz_sspce`,a.`id`FROM wz_point a LEFT JOIN wz_point_product b ON a.`id`=b.`wz_point_id` LEFT JOIN wz_product c ON b.`wz_product_scode` =c.`wz_scode`
+        WHERE c.`wz_scode`=#{scode} ORDER BY b.`is_default` DESC;
+  </select>
+
+</mapper>

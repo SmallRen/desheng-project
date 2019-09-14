@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>邮件发送</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+</head>
+<body>
+<div class="layui-container">
+    <div class="layui-row">
+        <div>
+            <div class="layui-input-inline">
+                <input type="text" name="eName" placeholder="查询邮件模板" class="layui-input">
+            </div>
+            <button type="button" class="layui-btn layui-btn-primary" id="queryEmail">查询</button>
+            <button type="button" class="layui-btn layui-btn-normal" id="addEmail">新增</button>
+            <button type="button" class="layui-btn layui-btn-danger">删除</button>
+        </div>
+        <table class="layui-table" id="emailList">
+        </table>
+    </div>
+    <div id="addEmailModel" style="display: none;width: 90%;margin: 5px auto">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">模板名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="eName" required lay-verify="required" placeholder="请输入模板名称"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">模板主题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="eTheme" required lay-verify="required" placeholder="请输入模板主题"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮件内容</label>
+                <div class="layui-input-block">
+                    <textarea id="demoDit" style="display: none;" name="eContent"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/layui/layui.all.js"></script>
+<script type="text/javascript">
+    layui.use(['form', 'table', 'layer', 'layedit'], function () {
+        var table = layui.table;
+        var layedit = layui.layedit;
+        table.render({
+            elem: '#emailList',
+            url: '/email/queryEmailTemplate',
+            method: 'POST',
+            height: 'full-94',
+            size: 'sm',
+            title: '邮件模板查询',
+            page: true,
+            cols: [
+                [{
+                    field: 'id',
+                    title: 'ID',
+                    sort: true,
+                    width: 60
+                }, {
+                    field: 'eName',
+                    title: '名称',
+                    width: 160
+                }, {
+                    field: 'eTheme',
+                    title: '邮件主题',
+                    sort: true,
+                    width: 160
+                }, {
+                    field: 'updateTime',
+                    title: '最后修改时间',
+                    sort: true,
+                    width: 160,
+                }, {
+                    field: 'sendTime',
+                    title: '发送时间',
+                    sort: true,
+                    width: 160,
+                }]
+            ]
+        });
+        $("#addEmail").click(function () {
+            layer.open({
+                title: '新增邮件模板'
+                , content: $('#addEmailModel')
+                , type: 1
+                , area: '630px'
+                , offset: 't'
+                , scrollbar: false
+                , shadeClose: true//点击遮罩层关闭
+            });
+            layedit.build("demoDit");//绑定富文本编辑器
+
+        });
+
+
+    });
+
+</script>
+</html>

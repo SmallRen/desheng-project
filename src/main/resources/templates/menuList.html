@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>菜单列表</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+    <style type="text/css">
+        #menuItem {
+            width: 90%;
+            height: 90%;
+            margin-top: 6px;
+        }
+
+        #addMenuWin {
+            margin-top: 6px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-btn-container">
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-add-circle-fine"
+                id="addMenuBut">新增菜单
+        </button>
+        </button>
+        <button type="button"
+                class="layui-btn layui-btn-primary layui-btn-sm layui-btn-danger layui-icon layui-icon-delete"
+                id="delMenuBut">删除菜单
+        </button>
+    </div>
+    <table id="menuList" class="layui-table" lay-filter="menuList" lay-size="sm">
+    </table>
+</div>
+
+</body>
+<!--编辑窗口加载自动会变成display:block-->
+<div style="display: none" id="menuItem">
+    <form class="layui-form " lay-filter="initMenuItem" id="initMenuItem">
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="id" autocomplete="off" class="layui-input layui-hide">
+                <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级菜单</label>
+            <div class="layui-input-block">
+                <select name="parentId" lay-filter="parentMenu" id="parentMenu" lay-search>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单类型</label>
+            <div class="layui-input-inline">
+                <input type="text" name="type" id="type" class="layui-input layui-disabled" readonly>
+            </div>
+            <div class="layui-form-mid layui-word-aux">不可更改</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">菜单描述</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" name="description" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单图标</label>
+            <div class="layui-input-block">
+                <input type="text" name="icon" class="layui-input" autocomplete="off">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单路径</label>
+            <div class="layui-input-block">
+                <input type="text" name="url" class="layui-input layui-disabled" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">启用状态</label>
+            <div class="layui-input-block">
+                <input type="checkbox" lay-skin="switch" name="status" id="status" lay-text="启用|禁用">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div style="display: none" id="addMenuWin">
+    <form class="layui-form" id="addMenuInit">
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入菜单名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级菜单</label>
+            <div class="layui-input-block">
+                <select name="parentId" id="selectMenu" lay-filter="selectMenu">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单类型</label>
+            <div class="layui-input-inline">
+                <input type="text" name="type" id="addType" class="layui-input layui-disabled" readonly>
+            </div>
+            <div class="layui-form-mid layui-word-aux">不可更改</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">菜单描述</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" name="description" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单路径</label>
+            <div class="layui-input-block">
+                <input type="text" name="url" id="addUrl" class="layui-input layui-disabled" readonly
+                       placeholder="请输入路径">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">启用状态</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked lay-skin="switch" name="status" id="addStatus" lay-text="启用|禁用">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="addMenuForm">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    layui.config({
+        base: '/js/',
+    });
+    layui.use(['treeTable', 'layer', 'code', 'form'], function () {
+        var treeTable = layui.treeTable;
+        var form = layui.form;
+        var menuList = new Array();
+        var treeData = treeTable.render({
+            elem: '#menuList'
+            , height: 'full-94'
+            , url: '/user/menuList' //数据接口
+            , page: true, //开启分页
+            icon_key: 'title',// 必须
+            is_checkbox: true,
+            primary_key: 'id',
+            parent_key: 'parentId',
+            cols: [
+                {
+                    key: 'title',//与上面的icon_ke的值对应
+                    title: '名称',
+                    width: '100px',
+                    template: function (item) {
+                        menuList.push(item);
+                        // console.log(item);
+                        if (item.level == 0) {
+                            return '<span style="color:red;">' + item.id + '</span>';
+                        } else if (item.level == 1) {
+                            return '<span style="color:green;">' + item.parentId + "-" + item.id + '</span>';
+                        } else if (item.level == 2) {
+                            return '<span style="color:#aaa;">' + item.parentId + "-" + item.id + '</span>';
+                        }
+                    }
+                },
+                {
+                    key: 'id',
+                    title: 'ID',
+                    width: '30px',
+                    align: 'center',
+                },
+                {
+                    key: 'name',
+                    title: '菜单名称',
+                    width: '100px',
+                    align: 'center',
+                },
+                {
+                    key: 'description',
+                    title: '菜单描述',
+                    width: '150px',
+                    align: 'center',
+                }, {
+                    key: 'url',
+                    title: '菜单路径',
+                    width: '140px',
+                    align: 'center',
+                    template: function (item) {
+                        return item.url == null ? "" : item.url;
+                    }
+                }, {
+                    key: 'parentId',
+                    title: '父ID',
+                    width: '30px',
+                    align: 'center',
+                }, {
+                    key: 'type',
+                    title: '菜单类型',
+                    width: '80px',
+                    align: 'center',
+                    template: function (item) {
+                        return item.type == 0 ? "一级菜单" : "二级菜单";
+                    }
+                }, {
+                    key: 'status',
+                    title: '菜单状态',
+                    width: '80px',
+                    align: 'center',
+                    template: function (item) {
+                        return item.status == 1 ? "有效" : "失效";
+                    }
+                }, {
+                    key: 'createTime',
+                    title: '创建时间',
+                    width: '100px',
+                    align: 'center',
+                }, {
+                    key: 'updateTime',
+                    title: '修改时间',
+                    width: '100px',
+                    align: 'center',
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    unresize: true,
+                    template: function (item) {
+                        return '<a lay-filter="edit">修改</a> | <a target="_blank" href="/detail?id=' + item.id + '">编辑</a>';
+                    }
+                }
+
+            ]
+
+        });
+
+        // 监听自定义
+        treeTable.on('tree(edit)', function (data) {
+            //console.log(data);
+            layer.open({
+                title: '菜单项',
+                type: 1,
+                offset: '10px',
+                area: ['480px', '550px'],//定义宽和高
+                shadeClose: true,//点击遮罩层关闭
+                content: $('#menuItem'),//打开的内容
+                yes: function (index) {
+                    $.ajax({
+                        url: "/main/userSetRole",
+                        type: "POST",
+                        dataType: "json",
+                        data: {"id": data.id, "rid": mycars},
+                        success: function (data) {
+                            if (data.status == 200) {
+                                layer.msg(data.msg);
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                        }
+                    });
+                    layer.close(index);
+                }
+            });
+
+            //打开修改窗口渲染父级菜单
+            $("#parentMenu").empty();
+            $.each(menuList, function (intdex, item) {
+                    //判断是否修改的是目录，目录只能修改名字，描述
+                    var op = null;
+                    if (data.item.type == 0) {
+                        op = "<option value='" + data.item.parentId + "'>" + data.item.name + "</option>";
+                        $("#parentMenu").append(op);
+                        form.render('select');
+                        return false;
+                    }
+                    //判断是否修改的一级菜单，可以更换对应的父菜单，不能修改成目录
+                    if (data.item.type == 1) {
+                        if (item.type == 0) {//只是遍历目录菜单
+                            //初始化当前菜单对应的父菜单
+                            if (data.item.parentId == item.id) {
+                                op = "<option value='" + item.id + "' selected = 'selected'>" + item.name + "</option>";
+                            } else {
+                                op = "<option value='" + item.id + "'>" + item.name + "</option>";
+                            }
+                        }
+                    }
+                    /*    判断是否修改的二级菜单，可以更换对应的父菜单，也可以修改为一级菜单，不能修改成目录(暂时不涉及二级菜单)
+                     else if (data.item.type == 2) {
+                        if (item.type == 0 || item.type == 1) {
+                            //初始化当前菜单对应的父菜单
+                            if (data.item.parentId == item.id) {
+                                op = "<option value='" + item.id + "' selected = 'selected'>" + item.name + "</option>";
+                            } else {
+                                op = "<option value='" + item.id + "'>" + item.name + "</option>";
+                            }
+                        }
+                    }*/
+
+                    $("#parentMenu").append(op);
+                    //最后一项时执行完成后更新渲染，不然只是不会显示在页面上的
+                    if (intdex == menuList.length - 1) {
+                        form.render('select');
+                    }
+                }
+            );
+
+            //表单出货初始化值initMenuItem 即 class="layui-form" 所在元素对应的 lay-filter="" 对应的值
+            form.val("initMenuItem", {
+                "id": data.item.id
+                , "name": data.item.name // "name": "value"
+                , "url": data.item.url
+                , "description": "女"
+                , "icon": data.item.icon
+                , "type": data.item.type == 0 ? "一级菜单" : "二级菜单"
+                , "status": data.item.status == 1 ? true : false
+                , "description": data.item.description
+            });
+            //监听表单提交修改一些值
+            form.on('submit(*)', function (data) {
+                if (data.field.type == '一级菜单') {
+                    $("#type").val(0)
+                } else {
+                    $("#type").val(1)
+                }
+                if (data.field.status == "on") {
+                    $("#status").val(1)
+                } else {
+                    $("#status").val(2)
+                }
+                $.ajax({
+                    url: "/permission/updatePermission",
+                    type: "post",
+                    data: $("#initMenuItem").serialize(),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.status == 200) {
+                            layer.msg(result.msg);
+                            treeTable.render(treeData) //更新treetable
+                            window.parent.navs();//刷新导航栏
+                        } else {
+                            layer.msg(result.msg);
+                        }
+                    }
+
+                });
+                //return false; 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+
+        });
+        $("#addMenuBut").click(function () {
+            var height = $("#iframepage", parent.document).height() + "px";
+            var width = $(document.body).width() + "px";
+            layer.open({
+                title: '新增菜单'
+                , content: $('#addMenuWin')
+                , area: [width, height]
+                , type: 1
+                , move: false//来禁止拖拽
+            });
+            var op = "<option value=''>请选择父级菜单</option>";
+            op += "<option value='0'>新增一级菜单</option>";
+            $.each(menuList, function (intdex, item) {
+                if (item.parentId == 0) {
+                    op += "<option value='" + item.id + "'>" + item.name + "</option>";
+                }
+                if (intdex == menuList.length - 1) {
+                    $("#selectMenu").html(op);
+                    form.render('select');//重新渲染select ，不然不会显示
+                }
+            });
+        });
+        form.on('select(selectMenu)', function (data) {
+            if (data.value == 0) {
+                $("#addType").val("一级菜单");
+                $("#addUrl").val("");
+                $("#addUrl").addClass("layui-disabled").attr("readonly", true);
+            } else {
+                $("#addType").val("二级菜单");
+                $("#addUrl").removeAttr("readonly").removeClass("layui-disabled");
+            }
+        });
+        form.on('submit(addMenuForm)', function (data) {
+            if (data.field.type == '一级菜单') {
+                $("#addType").val(0)
+            } else {
+                if (data.field.url == "") { //如果是二级菜单必须填写路劲
+                    layer.msg("路径不能为空")
+                    return false;
+                }
+                $("#addType").val(1)
+            }
+            if (data.field.status == "on") {
+                $("#addStatus").val(1)
+            } else {
+                $("#addStatus").val(2)
+            }
+
+            $.ajax({
+                url: "/permission/addPermission",
+                type: "post",
+                data: $("#addMenuInit").serialize(),
+                dataType: "json",
+                success: function (result) {
+                    if (result.status == 200) {
+                        layer.msg(result.msg);
+                        treeTable.render(treeData) //更新treetable
+                        window.parent.navs();//刷新导航栏
+                    } else {
+                        layer.msg(result.msg);
+                    }
+                }
+
+            });
+            //return false; 阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        $("#delMenuBut").click(function () {
+            layer.msg('选中参数' + treeTable.checked(treeData))//返回ID
+            $.post("/permission/delPermission/" + treeTable.checked(treeData), function (result) {
+                if (result.status == 200) {
+                    layer.msg(result.msg);
+                    treeTable.render(treeData) //更新treetable
+                    window.parent.navs();//刷新导航栏
+                } else {
+                    layer.msg(result.msg);
+                }
+
+            });
+        });
+
+    });
+    /**
+     * 创建
+     * 浏览器当前窗口文档body的宽度高度
+     */
+    var layevel = function () {
+        var height = $(document.body).height() + "px";
+        var width = $(document.body).width() + "px";
+        var div = "<div style='height: " + height + ";width: " + width + "'></div>"
+    }
+
+
+</script>
+</html>

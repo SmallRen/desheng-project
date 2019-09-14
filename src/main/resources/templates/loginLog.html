@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆日志页面</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+<body>
+<div class="layui-fluid">
+    <table id="loginLog" lay-filter="loginLog"></table>
+</div>
+<script type="text/html" id="toolbarUtil">
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">查看所有用户登陆日志</button>
+</script>
+</body>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    layui.use("table", function () {
+        var table = layui.table;
+        table.render({
+            elem: "#loginLog",
+            url: '/logManAge/loginLog',
+            method: 'POST',
+            height: 'full-94',
+            size: 'sm',
+            title: '用户登陆日志记录',
+            toolbar: "#toolbarUtil",
+            defaultToolbar: ['filter', 'print', 'exports'],
+            page: true,
+            cols: [
+                [{
+                    field: 'id',
+                    title: 'ID',
+                    sort: true,
+                    width: 60
+                }, {
+                    field: 'username',
+                    title: '用户名',
+                    width: 60
+                }, {
+                    field: 'status',
+                    title: '状态',
+                    sort: true,
+                    width: 100,
+                    templet: function (data) {
+                        if (data.status == 0) {
+                            return "登陆失败";
+                        } else {
+                            return "登陆成功";
+                        }
+                    }
+                }, {
+                    field: 'ip',
+                    title: 'IP地址',
+                    width: 140
+                }, {
+                    field: 'createTime',
+                    title: '登陆时间',
+                    sort: true,
+                    width: 160
+                }, {
+                    field: 'userAgent',
+                    title: '登陆设备',
+                }
+                ]
+            ]
+        });
+    });
+</script>
+</html>

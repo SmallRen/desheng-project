@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>目录页面</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/layui/myicon/iconfont.css" type="text/css">
+    <style type="text/css">
+        .header-bg {
+            background-color: #ddd8d9;
+            text-align: center;
+        }
+
+        .header-bg .header-name {
+            display: inline-block;
+            width: auto;
+            height: 50px;
+            line-height: 50px;
+            font-size: 22px;
+            font-weight: 600;
+            font-family: cursive;
+        }
+
+        .header-bg .header-close {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            position: absolute;
+            right: 40px;
+            top: 0px;
+        }
+
+        .header-close .layui-icon-guanbi {
+            font-size: 26px;
+            color: #616161;
+
+        }
+
+        .layui-layout .layui-body {
+            left: 0px;
+            top: 50px;
+            background-color: #7ba9cd;
+        }
+
+        .layui-body .body-content {
+            width: 80%;
+            margin: 70px auto;
+            height: 80%;
+            /*  background-color: aliceblue;*/
+        }
+
+        .layui-body .body-content ul {
+            display: block;
+            width: 80%;
+            height: 80%;
+            padding: 40px;
+            margin: 10px auto;
+            box-sizing: border-box;
+
+        }
+
+        .layui-body .body-content ul > li {
+            display: inline-block;
+            width: 10vw;
+            height: 10vw;
+            margin-left: 120px;
+            margin-bottom: 50px;
+            background-color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            cursor: pointer;
+            transform: rotateX(-30deg);
+            box-shadow: 0px 12px 13px 2px #888888;
+        }
+
+        .layui-body .body-content ul > li:hover {
+            cursor: pointer;
+            transform: scale(1.2);
+            -ms-transform: scale(1.2); /* IE 9 */
+            -moz-transform: scale(1.2); /* Firefox */
+            -webkit-transform: scale(1.2); /* Safari 和 Chrome */
+            -o-transform: scale(1.2);
+        }
+
+        .layui-body .body-content ul > li:nth-of-type(4) {
+            margin-left: 255px;
+        }
+
+        .layui-body .body-content ul > li a {
+            display: inline-block;
+            width: 9vw;
+            height: 9vw;
+            text-align: center;
+            border: 1.2px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 50%;
+            margin: 7px;
+        }
+
+        .layui-body .body-content ul > li a img {
+            width: 5vw;
+            height: 5vw;
+            line-height: 5vw;
+            padding: 8px;
+            margin-top: 8px;
+        }
+
+        .layui-body .body-content ul > li a span {
+            display: block;
+            width: auto;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: cursive;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-layout">
+    <div class="layui-layout">
+        <div class="layui-header header-bg">
+            <div class="header-name">钻井安全监督系统</div>
+            <a class="header-close " href="/login">
+                <i class="layui-icon layui-icon-guanbi"></i>
+            </a>
+        </div>
+        <div class="layui-body">
+            <div class="body-content">
+                <ul>
+                    <li><a><img src="/images/log.jpg"><span>监督工作</span></a></li>
+                    <li><a><img src="/images/log.jpg"><span>监督学习</span></a></li>
+                    <li><a><img src="/images/log.jpg"><span>监督咨询</span></a></li>
+                    <li><a><img src="/images/log.jpg"><span>经验分享</span></a></li>
+                    <li><a><img src="/images/log.jpg"><span>改进工作站</span></a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+</html>

@@ -1,0 +1,152 @@
+#①属性名称层级缩进不能少空格 
+#②属性后面的:和值之间要有空格
+spring:
+  quartz:
+    #相关属性配置
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: clusteredScheduler
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 10000
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+    #数据库方式 quartz会把任务记录到数据中
+    job-store-type: jdbc
+    #初始化表结构 若果不需要每次重启创建表则注释掉
+    # 初始化脚本
+    # jdbc:
+    #   schema: classpath:schema/tables_mysql.sql
+    #jdbc:
+    #initialize-schema: never
+  #开启彩色日志打印
+  output:
+    ansi:
+      enabled: ALWAYS
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+  datasource:
+    name: mysql_test
+    type: com.alibaba.druid.pool.DruidDataSource
+    #druid相关配置
+    druid:
+      #监控统计拦截的filters
+      filters: stat
+      driver-class-name: com.mysql.jdbc.Driver
+      #基本属性
+      url: jdbc:mysql://192.168.1.122:3306/desheng?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: wulei
+      password: 123456
+      #配置初始化大小/最小/最大
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      #获取连接等待超时时间
+      max-wait: 60000
+      #间隔多久进行一次检测，检测需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+      #一个连接在池中最小生存的时间
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+  #springboot整合activiti报错[processes/]不存在解决方案
+  activiti:
+    check-process-definitions: false
+    # 文件上传
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size:  10MB
+      # 设置总上传的文件大小
+      max-request-size:  20MB
+    #邮件配置 邮箱服务器地址
+    ## QQ smtp.qq.com
+    ## sina smtp.sina.cn
+    ## aliyun smtp.aliyun.com
+    ## 163 smtp.163.com
+  mail:
+    host: smtp.qq.com
+    username: 1370394516@qq.com
+    #邮箱授权码
+    password: jjbyabjcjabyifbh
+    default-encoding: UTF-8
+    #发送者
+    fromMail:
+      sender: 1370394516@qq.com
+  #配置rabbitMq参数
+  rabbitmq:
+    username: wulei
+    password: 123456
+    host: 192.168.231.66
+    port: 5672       #15672是Web管理界面的端口；5672是MQ访问的端口。
+    virtual-host: /
+    #生产端
+    publisher-confirms: true    #  消息发送到交换机确认机制,是否确认回调
+    publisher-returns: true # 开启发送失败退回
+    template:
+      mandatory: true
+    # 消费端
+    #手动ACK 不开启自动ACK模式,目的是防止报错后未正确处理消息丢失 默认 为 none
+    listener:
+      simple:
+        acknowledge-mode: manual
+
+
+
+# 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
+mybatis:
+  #注意：一定要对应mapper映射xml文件的所在路径
+  mapper-locations: classpath:mapper/*Mapper.xml
+  #注意：对应实体类的路径
+  type-aliases-package: com.layui.pojo
+mapper:
+  mappers:
+  - tk.mybatis.springboot.util.MyMapper
+  not-empty: false
+  identity: MYSQL
+#pagehelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+server:
+  #端口号
+  port: 8080
+  #解决Springboot启动后外部无法通过IP+端口方式访问，只能本地访问localhost
+  address: 0.0.0.0
+  #访问路径xxx项目名，如果不设定，默认是 /
+  servlet:
+    context-path: /
+  #加载日志配置文件
+logging:
+  config: classpath:logback-spring.xml
+  #自定义属性
+NAME: wulei
+#聚合 天气接口 没用
+weather:
+  appkey: 2b74c555a61ff4a203cee03cd9a96430
+  url: http://op.juhe.cn/onebox/weather/query
+#文件上传路径
+file:
+  uploadPath: w:/upload
+
+
+    

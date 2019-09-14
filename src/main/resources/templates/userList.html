@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>用户列表</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+</head>
+<body>
+<table id="userList" class="layui-hide" lay-filter="userList">
+</table>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">分配角色</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+</body>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    /* 注意：因为[
+             […]
+             ]之间的表达式在thymeleaf被认为是内联表达式,所以渲染错误，只要相同的括号在一行也会发生错误 ，就算在注释里面也是
+    解决[与[之间换行或者在script标签里 th:inline="none" 就可以了 */
+    layui.use('table', function () {
+        var table = layui.table;
+        var tableIns = table.render({
+            elem: '#userList',
+            url: '/user/userList',
+            height: 'full-94',
+            size: 'sm',
+            title: '用户表查询',
+            toolbar: '#toolbarDemo',
+            page: true,
+            cols: [
+                [
+                    //{type:'checkbox'},
+                    {field: 'id', title: 'ID', sort: true, width: 60}
+                    , {field: 'username', title: '用户名'}
+                    , {field: 'email', title: '邮箱', sort: true}
+                    , {field: 'phone', title: '电话', sort: true}
+                    , {
+                    field: 'sex', title: '性别', width: 60, sort: true, templet: function (d) {
+                        return d.sex == 1 ? "男" : "女";
+                    }
+                }
+                    , {field: 'age', title: '年龄', width: 60, sort: true}
+                    , {
+                    field: 'status', title: '状态', width: 100, sort: true, templet: function (d) {
+                        return d.status == 1 ? "正常" : "冻结";
+                    }
+                }
+                    , {field: 'createTime', title: '创建时间', sort: true}
+                    , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 200}
+                ]
+            ]
+        });
+        //头工具栏事件 table lay-filter值
+        table.on('toolbar(userList)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：' + data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                    break;
+            }
+            ;
+        });
+        //监听行工具事件 table lay-filter值
+        table.on('tool(userList)', function (obj) {
+            var data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么' + data.id, function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'edit') {
+                layer.open({
+                    title: '角色列表',
+                    area: ['750px', '500px'],//定义宽和高
+                    shadeClose: true,//点击遮罩层关闭
+                    btn: ['确认分配', '关闭'],
+                    btnAlign: 'c',
+                    type: 1,
+                    content: '<table id="roleList" style="margin:5px auto"></table>',//打开的内容
+                    yes: function (index) {
+                        var checkStatus = table.checkStatus('roleList');//获取表格对象
+                        var cheData = checkStatus.data;//获取选中的数据，是个数组
+                        var mycars = new Array();
+                        $.each(cheData, function (index, item) {
+                            mycars.push(item.id);
+                        });
+                        $.ajax({
+                            url: "/main/userSetRole",
+                            type: "POST",
+                            dataType: "json",
+                            data: {"id": data.id, "rid": mycars},
+                            success: function (data) {
+                                if (data.status == 200) {
+                                    layer.msg(data.msg);
+                                } else {
+                                    layer.msg(data.msg);
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    }
+                });
+                //https://blog.csdn.net/just4you/article/details/83717132
+                //layui中的table checkbox 默认选中设置
+                table = $.extend(table, {config: {checkName: 'checked'}});
+                table.render({
+                    elem: '#roleList',
+                    url: '/main/roleList',
+                    where: {rid: data.id},
+                    height: 330,
+                    size: 'sm',
+                    cols: [
+                        [
+                            {
+                                type: 'checkbox'
+                            }, {
+                            field: 'id',
+                            title: 'ID',
+                            sort: true,
+                            width: 60,
+                            totalRow: true
+                        }, {
+                            field: 'name',
+                            title: '角色名称',
+                            width: 150,
+                        }, {
+                            field: 'description',
+                            title: '角色描述',
+                        }, {
+                            field: 'status',
+                            title: '状态',
+                            sort: true,
+                            width: 80,
+                            templet: function (d) {
+                                return d.status == 1 ? "正常" : "删除";
+                            }
+                        }]
+                    ]
+                });
+            }
+        });
+
+    });
+
+
+</script>
+</html>

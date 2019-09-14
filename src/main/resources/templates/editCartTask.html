@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改车辆运转任务页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+    <style type="text/css">
+        .layui-card-body {
+            font-size: 13px;
+        }
+
+        .layui-form-label {
+            min-width: 130px;
+        }
+
+        .layui-input-block {
+            margin-left: 160px;
+        }
+
+        .layui-textarea {
+            min-height: 54px;
+        }
+
+        .layui-elem-field legend {
+            margin-left: 141px;
+            padding: 0 10px;
+            font-size: 16px;
+            font-weight: 300;
+            cursor: pointer;
+        }
+
+        .myLegend:hover {
+            color: #5FB878;
+        }
+
+        #line {
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        #orll {
+            width: 60px;
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" action="" lay-filter="component-form-element" id="component-form-element">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">修改工单</div>
+                    <span class="layui-card-body">
+                        <div class="layui-row layui-col-space10 layui-form-item">
+                            <div class="layui-col-lg4">
+                                <label class="layui-form-label">创建单位：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="createUnit" lay-verify="required" placeholder=""
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-col-lg4">
+                                <label class="layui-form-label">创建人：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="createPerson" lay-verify="required" placeholder=""
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">业务类型：</label>
+                            <div class="layui-input-block" id="businessType">
+                                <div class="layui-unselect layui-form-checkbox layui-form-checked ywType" data="1">
+                                    <span>非内转(不计量)</span><i
+                                        class="layui-icon layui-icon-ok"></i></div>
+
+                                <div class="layui-unselect layui-form-checkbox ywType" data="2"><span>内转(不计量)</span><i
+                                        class="layui-icon layui-icon-ok"></i></div>
+
+                                <div class="layui-unselect layui-form-checkbox ywType" data="3"><span>内转(不计量)</span><i
+                                        class="layui-icon layui-icon-ok"></i></div>
+                                <!--<input type="checkbox" name="ywType" title="内转(计量)"
+                                       lay-filter="adversion-number" value="4">-->
+                                <input type="hidden" name="ywType" title="非内转(不计量)" value="1">
+                            </div>
+                        </div>
+                        <div class="layui-row layui-col-space10 layui-form-item" id="dantianOptions"
+                             lay-filter="dantianOptions">
+                        </div>
+
+                        <div class="layui-form-item" id="addMaterialsCon">
+                            <div class="dynamic layui-col-space10">
+                                <div class="layui-col-lg4">
+                                    <label class="layui-form-label">物资名称：</label>
+                                    <div class="layui-input-block">
+                                            <input type="text" name="wzName" class="layui-input"
+                                                   style="position:absolute;z-index:2;width:80%;" lay-verify="required"
+                                                   onkeyup="search(this)" onclick="bindWz(this)" autocomplete="off">
+                                            <select type="text" lay-filter="hc_select" autocomplete="off"
+                                                    placeholder="移交单位全称"
+                                                    lay-verify="required" class="layui-select" lay-search>
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="layui-col-lg4">
+                                    <label class="layui-form-label">物资规格：</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="wzSspce" lay-verify="required" placeholder=""
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-lg2">
+                                    <label class="layui-form-label">数量：</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="wzNumber" lay-verify="number" placeholder=""
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <fieldset class="layui-elem-field layui-field-title">
+                            <legend id="addMaterials" class="myLegend">+继续添加物资</legend>
+                        </fieldset>
+
+
+                        <div class=" layui-form-item layui-col-space10">
+                            <div class="layui-col-lg4">
+                                <label class="layui-form-label">预定报警间隔：</label>
+                                <div class="layui-input-block">
+                                    <select name="bjTime">
+                                        <option value="5">5分钟</option>
+                                        <option value="10">10分分钟</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item" id="addWlLineCon" lay-filter="addWlLineCon">
+
+                        </div>
+
+                        <fieldset class="layui-elem-field layui-field-title">
+                            <legend>
+                                <span id="addWlLine" class="myLegend">+继续添加进厂门岗</span><span id="orll">||</span>
+                                <span id="addWlLine1" class="myLegend">+继续添加出厂物流路线</span>
+                            </legend>
+                        </fieldset>
+                        <div class="layui-form-item layui-col-space10">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <textarea name="gdMark" placeholder="" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                    </span>
+
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="newCartTaskSub">
+                                    确认修改
+                                </button>
+
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</body>
+<!--内转-->
+<script type="text/html" id="adversionConverted">
+    <div class="layui-col-lg3">
+        <div class="layui-form-item">
+            <label class="layui-form-label">二维码类型：</label>
+            <div class="layui-input-block" style="line-height: 36px">
+                <input type="button" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal" value="固定"
+                       name="ewmType">
+                <!-- <input type="checkbox" name="marriage" lay-skin="switch" lay-text="临时|固定" checked
+                        disabled>-->
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="layui-col-space10 layui-form-item">
+        <div class="layui-col-lg5">
+            <label class="layui-form-label">发货单位：</label>
+            <div class="layui-input-block">
+                <select name="fhUnit" lay-verify="required" id="fh_unit">
+
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-space10 layui-form-item">
+        <div class="layui-col-lg5">
+            <label class="layui-form-label">收货单位：</label>
+            <div class="layui-input-block">
+                <select name="shUnit" lay-verify="required" id="sh_unit">
+
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-space10 layui-form-item">
+        <div class="layui-col-lg5">
+            <label class="layui-form-label">车牌号：</label>
+            <div class="layui-input-block">
+                <select name="cph" lay-verify="required">
+                    <option value="123456">123456</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</script>
+<!--非内转-->
+<script type="text/html" id="theConverted">
+    <div class="layui-col-lg3">
+        <div class="layui-form-item">
+            <label class="layui-form-label">二维码类型：</label>
+            <div class="layui-input-block" style="line-height: 36px">
+                <input type="button" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal" value="临时"
+                       name="ewmType">
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="layui-col-lg3">
+        <div class="layui-form-item">
+            <div style="margin-top: 18px">
+                <div id="slideTest8" class="demo-slider"></div>
+            </div>
+            <div class="layui-input-block" style="display: none">
+                <input type="text" name="ewmNumber" class="layui-input" id="ewmNumber">
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-space10 layui-form-item">
+        <div class="layui-col-lg5">
+            <label class="layui-form-label">车牌号：</label>
+            <div class="layui-input-block">
+                <input type="text" name="cph" lay-verify="required" placeholder=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+</script>
+<!--继续添加物资-->
+<script type="text/html" id="addMaterialsItem">
+    <div class="dynamic layui-col-space10 delynamic">
+        <div class="layui-col-lg4">
+            <label class="layui-form-label">物资名称：</label>
+            <!--      <div class="layui-input-block">
+                      <input type="text" name="wzName" lay-verify="required" placeholder=""
+                             autocomplete="off" class="layui-input">
+                  </div>-->
+            <div class="layui-input-block">
+                <input type="text" name="wzName" class="layui-input"
+                       style="position:absolute;z-index:2;width:80%;" lay-verify="required"
+                       onkeyup="search(this)" onclick="bindWz(this)" autocomplete="off">
+                <select type="text" lay-filter="hc_select" autocomplete="off"
+                        placeholder="移交单位全称"
+                        lay-verify="required" class="layui-select" lay-search>
+                </select>
+            </div>
+        </div>
+        <div class="layui-col-lg4">
+            <label class="layui-form-label">物资规格：</label>
+            <div class="layui-input-block">
+                <input type="text" name="wzSspce" lay-verify="required" placeholder=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-lg2">
+            <label class="layui-form-label">数量：</label>
+            <div class="layui-input-block">
+                <input type="text" name="wzNumber" lay-verify="number" placeholder=""
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-lg2">
+            <div class="layui-input-block" style="margin-left: 0px">
+                <button type="button" class="layui-btn  layui-btn-danger" onclick="removeWz(this)">删除</button>
+            </div>
+        </div>
+    </div>
+</script>
+<!--继续添加进厂路线-->
+<script type="text/html" id="addWlLineOnItem">
+    <div class="dynamicLine layui-col-space10" lay-filter="dynamicLine">
+        <div class="layui-col-lg4">
+            <label class="layui-form-label geteSentry">预定进厂门岗：</label>
+            <div class="layui-input-block">
+                <select name="jcDoor" lay-filter="dynamicLine">
+                    <option value="1">1号门</option>
+                    <option value="2">2号门</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-col-lg1">
+            <div class="layui-input-block" style="margin-left: 0px">
+                <button type="button" class="layui-btn  layui-btn-danger" onclick="removeWzLine(this)">删除</button>
+            </div>
+        </div>
+    </div>
+</script>
+<!--继续添加出厂路线-->
+<script type="text/html" id="addWlLineOutItem">
+    <div class="dynamicLine layui-col-space10" lay-filter="dynamicLine">
+        <div class="layui-col-lg4">
+            <label class="layui-form-label geteSentry">预定出厂门岗：</label>
+            <div class="layui-input-block">
+                <select name="ccDoor">
+                    <option value="1">1号门</option>
+                    <option value="2">2号门</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-col-lg1">
+            <div class="layui-input-block" style="margin-left: 0px">
+                <button type="button" class="layui-btn  layui-btn-danger" onclick="removeWzLine(this)">删除</button>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+
+    var fhUnit = null;//发货单位变量
+    $(function () {
+        //从父层获取值，json是父层的全局js变量。eval是将该string类型的json串变为标准的json串
+        var parent_json = eval('(' + window.parent.jsonData + ')');
+        console.log(parent_json);
+        $("#dantianOptions").html($("#theConverted").html());
+//查询发货单位
+        $.ajax({
+            url: "/fhUnit/getFhUnitAll",
+            dataType: 'json',
+            type: 'GET',
+            success: function (result) {
+                if (result.status == 200) {
+                    fhUnit = result.data;
+                }
+            }
+        });
+    });
+    //切换业务类型删除动态添加的物资
+    /* function delDynamic() {
+    $("#addMaterialsCon .deldynamic").remove();
+    }*/
+
+    //注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['element', 'transfer', 'form', 'slider'], function () {
+        var element = layui.element;
+        var form = layui.form;
+        var slider = layui.slider;//滑块
+
+//继续添加物资事件
+        $("#addMaterials").click(function () {
+//console.log($("#addMaterialsItem").html())
+            $("#addMaterialsCon").append($("#addMaterialsItem").html());
+            form.render('select');
+        });
+        window.bindWz = function (e) {
+            var op = ' < option > 物资1 < /option> < option > 物资2 < /option>';
+            $(e).next().html(op);
+            form.render('select');
+        }
+
+
+//删除添加的物资
+        function removeWz(e) {
+            $(e).parents('div.dynamic').remove();
+        }
+
+//继续添加物资进厂路线
+        $("#addWlLine").click(function () {
+            $("#addWlLineCon").append($("#addWlLineOnItem").html());
+            form.render('select');
+        });
+//继续添加物资出厂路线
+        $("#addWlLine1").click(function () {
+            $("#addWlLineCon").append($("#addWlLineOutItem").html());
+            form.render('select');
+        });
+//删除添加的物资路线
+        removeWzLine = function (e) {
+            $(e).parents('div.dynamicLine').remove();
+        }
+
+//复选变成单选
+        $(document).on('click', '#businessType .ywType', function () {
+            $(this).siblings().removeClass('layui-form-checked');
+            $(this).addClass('layui-form-checked');
+            var v = $(this).attr('data');
+            $('#businessType input[name=ywType]').val(v);
+            if (v == 1) {
+//加载非内转HTML
+                $("#dantianOptions").html($("#theConverted").html());
+                form.render('select');
+                mySlider();
+            } else if (v == 2) {
+//内转不计量
+                $("#dantianOptions").html($("#adversionConverted").html());
+                if (fhUnit != null) {
+                    var op = ' < option > 选择车牌号 < /option>';
+                    $.each(fhUnit, function (intdex, item) {
+                        op += " < option value = '" + item.id + "' > " + item.unitName + " < /option>";
+                    });
+                    $("#fh_unit").html(op);
+                    $("#sh_unit").html(op);
+                    form.render('select');
+                }
+            } else if (v == 3) {
+                $("#dantianOptions").html($("#theConverted").html());
+                form.render('select');
+            }
+
+        });
+
+//滑块
+        mySlider = function () {
+            slider.render({
+                elem: '#slideTest8'
+                , input: true //输入框
+                , min: 1
+                , setTips: function (value) { //自定义提示文本
+                    $("#ewmNumber").val(value);
+                    return '二维码有效次数 ' + value;
+                }
+            });
+        };
+//滑块开启输入框
+        mySlider();
+
+        form.on('submit(newCartTaskSub)', function (data) {
+//window.top.tabListeners("派车单列表", "page/manage/cartTaskList");
+//数据分成三块 物资工单信息一块，物资清单一块，线路和报警时间
+//获取路线
+            var obj = $(document).find("#addWlLineCon select option:selected");
+            var obj1 = $(document).find("#addWlLineCon .geteSentry");
+            var select = [];//点位
+            var turnover = [];//点位对应进出口信息
+            obj.each(function (index, item) {
+                if ($(this).val() != "") {
+                    select.push($(this).val());
+                }
+            });
+//路线对应的改点是进出门岗信息
+            obj1.each(function (index, item) {
+                if ($(this).text() != "") {
+                    turnover.push($(this).text());
+                }
+            });
+            for (var i = 0; i < select.length; i++) {
+                console.log(select[i] + i + turnover[i]);
+            }
+//获取物资
+            var data1 = $("#component-form-element").serialize();
+
+            $.ajax({
+                url: '/wzItf/addNewWzItf?points=' + select + '&turnover=' + turnover,
+                type: 'POST',
+                dataType: 'json',
+                data: data1,
+                success: function (result) {
+                    if (result.satus == 200) {
+//成功显示打印二维码按钮
+                        $('#qRCode').removeClass("layui-hide");
+                        layer.msg(result.msg);
+                    } else {
+                        layer.msg(result.msg);
+                    }
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+
+        var ee = null;
+        form.on('select(hc_select)', function (data) { //选择移交单位 赋值给input框
+            ee.val(data.value);
+            ee.next().next().find("dl").css({"display": "none"});
+            form.render();
+        });
+        window.search = function (e) {
+            var value = $(e).val();
+            ee = $(e);
+            $(e).val(value);
+            form.render('select');//渲染下拉框
+            $(e).next().next().addClass("layui-form-selected");
+            var dl = $(e).next().next().find("dl").children();
+            var j = -1;
+            for (var i = 0; i < dl.length; i++) {
+                if (dl[i].innerHTML.indexOf(value) <= -1) {
+                    dl[i].style.display = "none";
+                    j++;
+                }
+                if (j == dl.length - 1) {
+                    $(e).next().next().removeClass("layui-form-selected");//({"display": "none"});
+                }
+            }
+        };
+    });
+</script>
+<
+/html>

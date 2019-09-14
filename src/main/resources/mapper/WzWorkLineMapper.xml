@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.desheng.mapper.WzWorkLineMapper">
+    <resultMap id="BaseResultMap" type="com.desheng.pojo.WzWorkLine">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="wz_itf_id" jdbcType="INTEGER" property="wzItfId"/>
+        <result column="point1" jdbcType="VARCHAR" property="point1"/>
+        <result column="point1_time" jdbcType="VARCHAR" property="point1Time"/>
+        <result column="point1_turnover" jdbcType="VARCHAR" property="point1Turnover"/>
+        <result column="point2" jdbcType="VARCHAR" property="point2"/>
+        <result column="point2_time" jdbcType="VARCHAR" property="point2Time"/>
+        <result column="point2_turnover" jdbcType="VARCHAR" property="point2Turnover"/>
+        <result column="point3" jdbcType="VARCHAR" property="point3"/>
+        <result column="point3_time" jdbcType="VARCHAR" property="point3Time"/>
+        <result column="point3_turnover" jdbcType="VARCHAR" property="point3Turnover"/>
+        <result column="point4" jdbcType="VARCHAR" property="point4"/>
+        <result column="point4_time" jdbcType="VARCHAR" property="point4Time"/>
+        <result column="point4_turnover" jdbcType="VARCHAR" property="point4Turnover"/>
+        <result column="point5" jdbcType="VARCHAR" property="point5"/>
+        <result column="point5_time" jdbcType="VARCHAR" property="point5Time"/>
+        <result column="point5_turnover" jdbcType="VARCHAR" property="point5Turnover"/>
+        <result column="point6" jdbcType="VARCHAR" property="point6"/>
+        <result column="point6_time" jdbcType="VARCHAR" property="point6Time"/>
+        <result column="point6_turnover" jdbcType="VARCHAR" property="point6Turnover"/>
+        <result column="point7" jdbcType="VARCHAR" property="point7"/>
+        <result column="point7_time" jdbcType="VARCHAR" property="point7Time"/>
+        <result column="point7_turnover" jdbcType="VARCHAR" property="point7Turnover"/>
+        <result column="point8" jdbcType="VARCHAR" property="point8"/>
+        <result column="point8_time" jdbcType="VARCHAR" property="point8Time"/>
+        <result column="point8_turnover" jdbcType="VARCHAR" property="point8Turnover"/>
+        <result column="point9" jdbcType="VARCHAR" property="point9"/>
+        <result column="point9_time" jdbcType="VARCHAR" property="point9Time"/>
+        <result column="point9_turnover" jdbcType="VARCHAR" property="point9Turnover"/>
+        <result column="point10" jdbcType="VARCHAR" property="point10"/>
+        <result column="point10_time" jdbcType="VARCHAR" property="point10Time"/>
+        <result column="point10_turnover" jdbcType="VARCHAR" property="point10Turnover"/>
+        <result column="point11" jdbcType="VARCHAR" property="point11"/>
+        <result column="point11_time" jdbcType="VARCHAR" property="point11Time"/>
+        <result column="point11_turnover" jdbcType="VARCHAR" property="point11Turnover"/>
+        <result column="point12" jdbcType="VARCHAR" property="point12"/>
+        <result column="point12_time" jdbcType="VARCHAR" property="point12Time"/>
+        <result column="point12_turnover" jdbcType="VARCHAR" property="point12Turnover"/>
+        <result column="point_number" jdbcType="INTEGER" property="pointNumber"/>
+        <result column="point_slicer" jdbcType="INTEGER" property="pointSlicer"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, wz_itf_id, point1, point1_time, point1_turnover, point2, point2_time, point2_turnover, 
+    point3, point3_time, point3_turnover, point4, point4_time, point4_turnover, point5, 
+    point5_time, point5_turnover, point6, point6_time, point6_turnover, point7, point7_time, 
+    point7_turnover, point8, point8_time, point8_turnover, point9, point9_time, point9_turnover, 
+    point10, point10_time, point10_turnover, point11, point11_time, point11_turnover, 
+    point12, point12_time, point12_turnover, point_number, point_slicer
+  </sql>
+    <select id="selectByExample" parameterType="com.desheng.pojo.WzWorkLineExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from wz_workline
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="com.desheng.pojo.WzWorkLineKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from wz_workline
+        where id = #{id,jdbcType=INTEGER}
+        and wz_itf_id = #{wzItfId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="com.desheng.pojo.WzWorkLineKey">
+    delete from wz_workline
+    where id = #{id,jdbcType=INTEGER}
+      and wz_itf_id = #{wzItfId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.desheng.pojo.WzWorkLineExample">
+        delete from wz_workline
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.desheng.pojo.WzWorkLine">
+    insert into wz_workline (id, wz_itf_id, point1, 
+      point1_time, point1_turnover, point2, 
+      point2_time, point2_turnover, point3, 
+      point3_time, point3_turnover, point4, 
+      point4_time, point4_turnover, point5, 
+      point5_time, point5_turnover, point6, 
+      point6_time, point6_turnover, point7, 
+      point7_time, point7_turnover, point8, 
+      point8_time, point8_turnover, point9, 
+      point9_time, point9_turnover, point10, 
+      point10_time, point10_turnover, point11, 
+      point11_time, point11_turnover, point12, 
+      point12_time, point12_turnover, point_number, 
+      point_slicer)
+    values (#{id,jdbcType=INTEGER}, #{wzItfId,jdbcType=INTEGER}, #{point1,jdbcType=VARCHAR}, 
+      #{point1Time,jdbcType=VARCHAR}, #{point1Turnover,jdbcType=VARCHAR}, #{point2,jdbcType=VARCHAR}, 
+      #{point2Time,jdbcType=VARCHAR}, #{point2Turnover,jdbcType=VARCHAR}, #{point3,jdbcType=VARCHAR}, 
+      #{point3Time,jdbcType=VARCHAR}, #{point3Turnover,jdbcType=VARCHAR}, #{point4,jdbcType=VARCHAR}, 
+      #{point4Time,jdbcType=VARCHAR}, #{point4Turnover,jdbcType=VARCHAR}, #{point5,jdbcType=VARCHAR}, 
+      #{point5Time,jdbcType=VARCHAR}, #{point5Turnover,jdbcType=VARCHAR}, #{point6,jdbcType=VARCHAR}, 
+      #{point6Time,jdbcType=VARCHAR}, #{point6Turnover,jdbcType=VARCHAR}, #{point7,jdbcType=VARCHAR}, 
+      #{point7Time,jdbcType=VARCHAR}, #{point7Turnover,jdbcType=VARCHAR}, #{point8,jdbcType=VARCHAR}, 
+      #{point8Time,jdbcType=VARCHAR}, #{point8Turnover,jdbcType=VARCHAR}, #{point9,jdbcType=VARCHAR}, 
+      #{point9Time,jdbcType=VARCHAR}, #{point9Turnover,jdbcType=VARCHAR}, #{point10,jdbcType=VARCHAR}, 
+      #{point10Time,jdbcType=VARCHAR}, #{point10Turnover,jdbcType=VARCHAR}, #{point11,jdbcType=VARCHAR}, 
+      #{point11Time,jdbcType=VARCHAR}, #{point11Turnover,jdbcType=VARCHAR}, #{point12,jdbcType=VARCHAR}, 
+      #{point12Time,jdbcType=VARCHAR}, #{point12Turnover,jdbcType=VARCHAR}, #{pointNumber,jdbcType=INTEGER}, 
+      #{pointSlicer,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.desheng.pojo.WzWorkLine">
+        insert into wz_workline
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="wzItfId != null">
+                wz_itf_id,
+            </if>
+            <if test="point1 != null">
+                point1,
+            </if>
+            <if test="point1Time != null">
+                point1_time,
+            </if>
+            <if test="point1Turnover != null">
+                point1_turnover,
+            </if>
+            <if test="point2 != null">
+                point2,
+            </if>
+            <if test="point2Time != null">
+                point2_time,
+            </if>
+            <if test="point2Turnover != null">
+                point2_turnover,
+            </if>
+            <if test="point3 != null">
+                point3,
+            </if>
+            <if test="point3Time != null">
+                point3_time,
+            </if>
+            <if test="point3Turnover != null">
+                point3_turnover,
+            </if>
+            <if test="point4 != null">
+                point4,
+            </if>
+            <if test="point4Time != null">
+                point4_time,
+            </if>
+            <if test="point4Turnover != null">
+                point4_turnover,
+            </if>
+            <if test="point5 != null">
+                point5,
+            </if>
+            <if test="point5Time != null">
+                point5_time,
+            </if>
+            <if test="point5Turnover != null">
+                point5_turnover,
+            </if>
+            <if test="point6 != null">
+                point6,
+            </if>
+            <if test="point6Time != null">
+                point6_time,
+            </if>
+            <if test="point6Turnover != null">
+                point6_turnover,
+            </if>
+            <if test="point7 != null">
+                point7,
+            </if>
+            <if test="point7Time != null">
+                point7_time,
+            </if>
+            <if test="point7Turnover != null">
+                point7_turnover,
+            </if>
+            <if test="point8 != null">
+                point8,
+            </if>
+            <if test="point8Time != null">
+                point8_time,
+            </if>
+            <if test="point8Turnover != null">
+                point8_turnover,
+            </if>
+            <if test="point9 != null">
+                point9,
+            </if>
+            <if test="point9Time != null">
+                point9_time,
+            </if>
+            <if test="point9Turnover != null">
+                point9_turnover,
+            </if>
+            <if test="point10 != null">
+                point10,
+            </if>
+            <if test="point10Time != null">
+                point10_time,
+            </if>
+            <if test="point10Turnover != null">
+                point10_turnover,
+            </if>
+            <if test="point11 != null">
+                point11,
+            </if>
+            <if test="point11Time != null">
+                point11_time,
+            </if>
+            <if test="point11Turnover != null">
+                point11_turnover,
+            </if>
+            <if test="point12 != null">
+                point12,
+            </if>
+            <if test="point12Time != null">
+                point12_time,
+            </if>
+            <if test="point12Turnover != null">
+                point12_turnover,
+            </if>
+            <if test="pointNumber != null">
+                point_number,
+            </if>
+            <if test="pointSlicer != null">
+                point_slicer,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="wzItfId != null">
+                #{wzItfId,jdbcType=INTEGER},
+            </if>
+            <if test="point1 != null">
+                #{point1,jdbcType=VARCHAR},
+            </if>
+            <if test="point1Time != null">
+                #{point1Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point1Turnover != null">
+                #{point1Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point2 != null">
+                #{point2,jdbcType=VARCHAR},
+            </if>
+            <if test="point2Time != null">
+                #{point2Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point2Turnover != null">
+                #{point2Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point3 != null">
+                #{point3,jdbcType=VARCHAR},
+            </if>
+            <if test="point3Time != null">
+                #{point3Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point3Turnover != null">
+                #{point3Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point4 != null">
+                #{point4,jdbcType=VARCHAR},
+            </if>
+            <if test="point4Time != null">
+                #{point4Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point4Turnover != null">
+                #{point4Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point5 != null">
+                #{point5,jdbcType=VARCHAR},
+            </if>
+            <if test="point5Time != null">
+                #{point5Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point5Turnover != null">
+                #{point5Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point6 != null">
+                #{point6,jdbcType=VARCHAR},
+            </if>
+            <if test="point6Time != null">
+                #{point6Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point6Turnover != null">
+                #{point6Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point7 != null">
+                #{point7,jdbcType=VARCHAR},
+            </if>
+            <if test="point7Time != null">
+                #{point7Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point7Turnover != null">
+                #{point7Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point8 != null">
+                #{point8,jdbcType=VARCHAR},
+            </if>
+            <if test="point8Time != null">
+                #{point8Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point8Turnover != null">
+                #{point8Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point9 != null">
+                #{point9,jdbcType=VARCHAR},
+            </if>
+            <if test="point9Time != null">
+                #{point9Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point9Turnover != null">
+                #{point9Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point10 != null">
+                #{point10,jdbcType=VARCHAR},
+            </if>
+            <if test="point10Time != null">
+                #{point10Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point10Turnover != null">
+                #{point10Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point11 != null">
+                #{point11,jdbcType=VARCHAR},
+            </if>
+            <if test="point11Time != null">
+                #{point11Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point11Turnover != null">
+                #{point11Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point12 != null">
+                #{point12,jdbcType=VARCHAR},
+            </if>
+            <if test="point12Time != null">
+                #{point12Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point12Turnover != null">
+                #{point12Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="pointNumber != null">
+                #{pointNumber,jdbcType=INTEGER},
+            </if>
+            <if test="pointSlicer != null">
+                #{pointSlicer,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertSelectiveMap" parameterType="java.util.Map">
+        insert into wz_workline
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="wzItfId != null">
+                wz_itf_id,
+            </if>
+            <if test="point1 != null">
+                point1,
+            </if>
+            <if test="point1Time != null">
+                point1_time,
+            </if>
+            <if test="point1Turnover != null">
+                point1_turnover,
+            </if>
+            <if test="point2 != null">
+                point2,
+            </if>
+            <if test="point2Time != null">
+                point2_time,
+            </if>
+            <if test="point2Turnover != null">
+                point2_turnover,
+            </if>
+            <if test="point3 != null">
+                point3,
+            </if>
+            <if test="point3Time != null">
+                point3_time,
+            </if>
+            <if test="point3Turnover != null">
+                point3_turnover,
+            </if>
+            <if test="point4 != null">
+                point4,
+            </if>
+            <if test="point4Time != null">
+                point4_time,
+            </if>
+            <if test="point4Turnover != null">
+                point4_turnover,
+            </if>
+            <if test="point5 != null">
+                point5,
+            </if>
+            <if test="point5Time != null">
+                point5_time,
+            </if>
+            <if test="point5Turnover != null">
+                point5_turnover,
+            </if>
+            <if test="point6 != null">
+                point6,
+            </if>
+            <if test="point6Time != null">
+                point6_time,
+            </if>
+            <if test="point6Turnover != null">
+                point6_turnover,
+            </if>
+            <if test="point7 != null">
+                point7,
+            </if>
+            <if test="point7Time != null">
+                point7_time,
+            </if>
+            <if test="point7Turnover != null">
+                point7_turnover,
+            </if>
+            <if test="point8 != null">
+                point8,
+            </if>
+            <if test="point8Time != null">
+                point8_time,
+            </if>
+            <if test="point8Turnover != null">
+                point8_turnover,
+            </if>
+            <if test="point9 != null">
+                point9,
+            </if>
+            <if test="point9Time != null">
+                point9_time,
+            </if>
+            <if test="point9Turnover != null">
+                point9_turnover,
+            </if>
+            <if test="point10 != null">
+                point10,
+            </if>
+            <if test="point10Time != null">
+                point10_time,
+            </if>
+            <if test="point10Turnover != null">
+                point10_turnover,
+            </if>
+            <if test="point11 != null">
+                point11,
+            </if>
+            <if test="point11Time != null">
+                point11_time,
+            </if>
+            <if test="point11Turnover != null">
+                point11_turnover,
+            </if>
+            <if test="point12 != null">
+                point12,
+            </if>
+            <if test="point12Time != null">
+                point12_time,
+            </if>
+            <if test="point12Turnover != null">
+                point12_turnover,
+            </if>
+            <if test="pointNumber != null">
+                point_number,
+            </if>
+            <if test="pointSlicer != null">
+                point_slicer,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="wzItfId != null">
+                #{wzItfId,jdbcType=INTEGER},
+            </if>
+            <if test="point1 != null">
+                #{point1,jdbcType=VARCHAR},
+            </if>
+            <if test="point1Time != null">
+                #{point1Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point1Turnover != null">
+                #{point1Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point2 != null">
+                #{point2,jdbcType=VARCHAR},
+            </if>
+            <if test="point2Time != null">
+                #{point2Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point2Turnover != null">
+                #{point2Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point3 != null">
+                #{point3,jdbcType=VARCHAR},
+            </if>
+            <if test="point3Time != null">
+                #{point3Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point3Turnover != null">
+                #{point3Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point4 != null">
+                #{point4,jdbcType=VARCHAR},
+            </if>
+            <if test="point4Time != null">
+                #{point4Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point4Turnover != null">
+                #{point4Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point5 != null">
+                #{point5,jdbcType=VARCHAR},
+            </if>
+            <if test="point5Time != null">
+                #{point5Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point5Turnover != null">
+                #{point5Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point6 != null">
+                #{point6,jdbcType=VARCHAR},
+            </if>
+            <if test="point6Time != null">
+                #{point6Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point6Turnover != null">
+                #{point6Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point7 != null">
+                #{point7,jdbcType=VARCHAR},
+            </if>
+            <if test="point7Time != null">
+                #{point7Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point7Turnover != null">
+                #{point7Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point8 != null">
+                #{point8,jdbcType=VARCHAR},
+            </if>
+            <if test="point8Time != null">
+                #{point8Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point8Turnover != null">
+                #{point8Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point9 != null">
+                #{point9,jdbcType=VARCHAR},
+            </if>
+            <if test="point9Time != null">
+                #{point9Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point9Turnover != null">
+                #{point9Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point10 != null">
+                #{point10,jdbcType=VARCHAR},
+            </if>
+            <if test="point10Time != null">
+                #{point10Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point10Turnover != null">
+                #{point10Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point11 != null">
+                #{point11,jdbcType=VARCHAR},
+            </if>
+            <if test="point11Time != null">
+                #{point11Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point11Turnover != null">
+                #{point11Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point12 != null">
+                #{point12,jdbcType=VARCHAR},
+            </if>
+            <if test="point12Time != null">
+                #{point12Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point12Turnover != null">
+                #{point12Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="pointNumber != null">
+                #{pointNumber,jdbcType=INTEGER},
+            </if>
+            <if test="pointSlicer != null">
+                #{pointSlicer,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.desheng.pojo.WzWorkLineExample" resultType="java.lang.Long">
+        select count(*) from wz_workline
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update wz_workline
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.wzItfId != null">
+                wz_itf_id = #{record.wzItfId,jdbcType=INTEGER},
+            </if>
+            <if test="record.point1 != null">
+                point1 = #{record.point1,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point1Time != null">
+                point1_time = #{record.point1Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point1Turnover != null">
+                point1_turnover = #{record.point1Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point2 != null">
+                point2 = #{record.point2,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point2Time != null">
+                point2_time = #{record.point2Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point2Turnover != null">
+                point2_turnover = #{record.point2Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point3 != null">
+                point3 = #{record.point3,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point3Time != null">
+                point3_time = #{record.point3Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point3Turnover != null">
+                point3_turnover = #{record.point3Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point4 != null">
+                point4 = #{record.point4,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point4Time != null">
+                point4_time = #{record.point4Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point4Turnover != null">
+                point4_turnover = #{record.point4Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point5 != null">
+                point5 = #{record.point5,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point5Time != null">
+                point5_time = #{record.point5Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point5Turnover != null">
+                point5_turnover = #{record.point5Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point6 != null">
+                point6 = #{record.point6,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point6Time != null">
+                point6_time = #{record.point6Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point6Turnover != null">
+                point6_turnover = #{record.point6Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point7 != null">
+                point7 = #{record.point7,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point7Time != null">
+                point7_time = #{record.point7Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point7Turnover != null">
+                point7_turnover = #{record.point7Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point8 != null">
+                point8 = #{record.point8,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point8Time != null">
+                point8_time = #{record.point8Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point8Turnover != null">
+                point8_turnover = #{record.point8Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point9 != null">
+                point9 = #{record.point9,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point9Time != null">
+                point9_time = #{record.point9Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point9Turnover != null">
+                point9_turnover = #{record.point9Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point10 != null">
+                point10 = #{record.point10,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point10Time != null">
+                point10_time = #{record.point10Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point10Turnover != null">
+                point10_turnover = #{record.point10Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point11 != null">
+                point11 = #{record.point11,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point11Time != null">
+                point11_time = #{record.point11Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point11Turnover != null">
+                point11_turnover = #{record.point11Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point12 != null">
+                point12 = #{record.point12,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point12Time != null">
+                point12_time = #{record.point12Time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.point12Turnover != null">
+                point12_turnover = #{record.point12Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="record.pointNumber != null">
+                point_number = #{record.pointNumber,jdbcType=INTEGER},
+            </if>
+            <if test="record.pointSlicer != null">
+                point_slicer = #{record.pointSlicer,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update wz_workline
+        set id = #{record.id,jdbcType=INTEGER},
+        wz_itf_id = #{record.wzItfId,jdbcType=INTEGER},
+        point1 = #{record.point1,jdbcType=VARCHAR},
+        point1_time = #{record.point1Time,jdbcType=VARCHAR},
+        point1_turnover = #{record.point1Turnover,jdbcType=VARCHAR},
+        point2 = #{record.point2,jdbcType=VARCHAR},
+        point2_time = #{record.point2Time,jdbcType=VARCHAR},
+        point2_turnover = #{record.point2Turnover,jdbcType=VARCHAR},
+        point3 = #{record.point3,jdbcType=VARCHAR},
+        point3_time = #{record.point3Time,jdbcType=VARCHAR},
+        point3_turnover = #{record.point3Turnover,jdbcType=VARCHAR},
+        point4 = #{record.point4,jdbcType=VARCHAR},
+        point4_time = #{record.point4Time,jdbcType=VARCHAR},
+        point4_turnover = #{record.point4Turnover,jdbcType=VARCHAR},
+        point5 = #{record.point5,jdbcType=VARCHAR},
+        point5_time = #{record.point5Time,jdbcType=VARCHAR},
+        point5_turnover = #{record.point5Turnover,jdbcType=VARCHAR},
+        point6 = #{record.point6,jdbcType=VARCHAR},
+        point6_time = #{record.point6Time,jdbcType=VARCHAR},
+        point6_turnover = #{record.point6Turnover,jdbcType=VARCHAR},
+        point7 = #{record.point7,jdbcType=VARCHAR},
+        point7_time = #{record.point7Time,jdbcType=VARCHAR},
+        point7_turnover = #{record.point7Turnover,jdbcType=VARCHAR},
+        point8 = #{record.point8,jdbcType=VARCHAR},
+        point8_time = #{record.point8Time,jdbcType=VARCHAR},
+        point8_turnover = #{record.point8Turnover,jdbcType=VARCHAR},
+        point9 = #{record.point9,jdbcType=VARCHAR},
+        point9_time = #{record.point9Time,jdbcType=VARCHAR},
+        point9_turnover = #{record.point9Turnover,jdbcType=VARCHAR},
+        point10 = #{record.point10,jdbcType=VARCHAR},
+        point10_time = #{record.point10Time,jdbcType=VARCHAR},
+        point10_turnover = #{record.point10Turnover,jdbcType=VARCHAR},
+        point11 = #{record.point11,jdbcType=VARCHAR},
+        point11_time = #{record.point11Time,jdbcType=VARCHAR},
+        point11_turnover = #{record.point11Turnover,jdbcType=VARCHAR},
+        point12 = #{record.point12,jdbcType=VARCHAR},
+        point12_time = #{record.point12Time,jdbcType=VARCHAR},
+        point12_turnover = #{record.point12Turnover,jdbcType=VARCHAR},
+        point_number = #{record.pointNumber,jdbcType=INTEGER},
+        point_slicer = #{record.pointSlicer,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.desheng.pojo.WzWorkLine">
+        update wz_workline
+        <set>
+            <if test="point1 != null">
+                point1 = #{point1,jdbcType=VARCHAR},
+            </if>
+            <if test="point1Time != null">
+                point1_time = #{point1Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point1Turnover != null">
+                point1_turnover = #{point1Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point2 != null">
+                point2 = #{point2,jdbcType=VARCHAR},
+            </if>
+            <if test="point2Time != null">
+                point2_time = #{point2Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point2Turnover != null">
+                point2_turnover = #{point2Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point3 != null">
+                point3 = #{point3,jdbcType=VARCHAR},
+            </if>
+            <if test="point3Time != null">
+                point3_time = #{point3Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point3Turnover != null">
+                point3_turnover = #{point3Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point4 != null">
+                point4 = #{point4,jdbcType=VARCHAR},
+            </if>
+            <if test="point4Time != null">
+                point4_time = #{point4Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point4Turnover != null">
+                point4_turnover = #{point4Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point5 != null">
+                point5 = #{point5,jdbcType=VARCHAR},
+            </if>
+            <if test="point5Time != null">
+                point5_time = #{point5Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point5Turnover != null">
+                point5_turnover = #{point5Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point6 != null">
+                point6 = #{point6,jdbcType=VARCHAR},
+            </if>
+            <if test="point6Time != null">
+                point6_time = #{point6Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point6Turnover != null">
+                point6_turnover = #{point6Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point7 != null">
+                point7 = #{point7,jdbcType=VARCHAR},
+            </if>
+            <if test="point7Time != null">
+                point7_time = #{point7Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point7Turnover != null">
+                point7_turnover = #{point7Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point8 != null">
+                point8 = #{point8,jdbcType=VARCHAR},
+            </if>
+            <if test="point8Time != null">
+                point8_time = #{point8Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point8Turnover != null">
+                point8_turnover = #{point8Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point9 != null">
+                point9 = #{point9,jdbcType=VARCHAR},
+            </if>
+            <if test="point9Time != null">
+                point9_time = #{point9Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point9Turnover != null">
+                point9_turnover = #{point9Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point10 != null">
+                point10 = #{point10,jdbcType=VARCHAR},
+            </if>
+            <if test="point10Time != null">
+                point10_time = #{point10Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point10Turnover != null">
+                point10_turnover = #{point10Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point11 != null">
+                point11 = #{point11,jdbcType=VARCHAR},
+            </if>
+            <if test="point11Time != null">
+                point11_time = #{point11Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point11Turnover != null">
+                point11_turnover = #{point11Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="point12 != null">
+                point12 = #{point12,jdbcType=VARCHAR},
+            </if>
+            <if test="point12Time != null">
+                point12_time = #{point12Time,jdbcType=VARCHAR},
+            </if>
+            <if test="point12Turnover != null">
+                point12_turnover = #{point12Turnover,jdbcType=VARCHAR},
+            </if>
+            <if test="pointNumber != null">
+                point_number = #{pointNumber,jdbcType=INTEGER},
+            </if>
+            <if test="pointSlicer != null">
+                point_slicer = #{pointSlicer,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+        and wz_itf_id = #{wzItfId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.desheng.pojo.WzWorkLine">
+    update wz_workline
+    set point1 = #{point1,jdbcType=VARCHAR},
+      point1_time = #{point1Time,jdbcType=VARCHAR},
+      point1_turnover = #{point1Turnover,jdbcType=VARCHAR},
+      point2 = #{point2,jdbcType=VARCHAR},
+      point2_time = #{point2Time,jdbcType=VARCHAR},
+      point2_turnover = #{point2Turnover,jdbcType=VARCHAR},
+      point3 = #{point3,jdbcType=VARCHAR},
+      point3_time = #{point3Time,jdbcType=VARCHAR},
+      point3_turnover = #{point3Turnover,jdbcType=VARCHAR},
+      point4 = #{point4,jdbcType=VARCHAR},
+      point4_time = #{point4Time,jdbcType=VARCHAR},
+      point4_turnover = #{point4Turnover,jdbcType=VARCHAR},
+      point5 = #{point5,jdbcType=VARCHAR},
+      point5_time = #{point5Time,jdbcType=VARCHAR},
+      point5_turnover = #{point5Turnover,jdbcType=VARCHAR},
+      point6 = #{point6,jdbcType=VARCHAR},
+      point6_time = #{point6Time,jdbcType=VARCHAR},
+      point6_turnover = #{point6Turnover,jdbcType=VARCHAR},
+      point7 = #{point7,jdbcType=VARCHAR},
+      point7_time = #{point7Time,jdbcType=VARCHAR},
+      point7_turnover = #{point7Turnover,jdbcType=VARCHAR},
+      point8 = #{point8,jdbcType=VARCHAR},
+      point8_time = #{point8Time,jdbcType=VARCHAR},
+      point8_turnover = #{point8Turnover,jdbcType=VARCHAR},
+      point9 = #{point9,jdbcType=VARCHAR},
+      point9_time = #{point9Time,jdbcType=VARCHAR},
+      point9_turnover = #{point9Turnover,jdbcType=VARCHAR},
+      point10 = #{point10,jdbcType=VARCHAR},
+      point10_time = #{point10Time,jdbcType=VARCHAR},
+      point10_turnover = #{point10Turnover,jdbcType=VARCHAR},
+      point11 = #{point11,jdbcType=VARCHAR},
+      point11_time = #{point11Time,jdbcType=VARCHAR},
+      point11_turnover = #{point11Turnover,jdbcType=VARCHAR},
+      point12 = #{point12,jdbcType=VARCHAR},
+      point12_time = #{point12Time,jdbcType=VARCHAR},
+      point12_turnover = #{point12Turnover,jdbcType=VARCHAR},
+      point_number = #{pointNumber,jdbcType=INTEGER},
+      point_slicer = #{pointSlicer,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+      and wz_itf_id = #{wzItfId,jdbcType=INTEGER}
+  </update>
+</mapper>

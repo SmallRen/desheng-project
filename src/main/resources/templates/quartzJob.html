@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>quartz页面</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+    <style type="text/css">
+        #quartzItem {
+            width: 90%;
+            height: 90%;
+            margin-top: 6px;
+        }
+
+        .layui-form-label {
+            width: 150px;
+        }
+
+        .layui-input-block {
+            margin-left: 180px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <table id="quartzJobList" class="layui-hide" lay-filter="quartzJobList"></table>
+</div>
+<!--新增窗口-->
+<div style="display: none" id="quartzItem">
+    <form class="layui-form " lay-filter="initQuartzItem" id="initQuartzItem">
+        <div class="layui-form-item">
+            <label class="layui-form-label">任务名称：</label>
+            <div class="layui-input-block">
+                <input type="text" name="jobName" placeholder="请输入" autocomplete="off" lay-verify="required"
+                       lay-reqtext="必填项，不能为空" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">任务分组：</label>
+            <div class="layui-input-block">
+                <select name="jobGroup" lay-filter="parentMenu" id="parentMenu" lay-search>
+                    <option value="DEFAULT">默认</option>
+                    <option value="SYSTEM">系统</option>
+                </select>
+            </div>
+        </div>
+        <!--  <div class="layui-form-item">
+              <label class="layui-form-label">调用目标字符串：</label>
+              <div class="layui-input-block">
+                  <input type="text" name="invokeTarget" id="invokeTarget" class="layui-input">
+              </div>
+          </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">调用目标：</label>
+            <div class="layui-input-inline" style="width: 155px">
+                <select name="clsaaName" id="clsaaName" lay-filter="clsaaName">
+                    <option value="">调用业务类</option>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 270px;">
+                <select name="invokeTarget" id="invokeTarget" lay-filter="invokeTarget">
+                    <option value="">请选业务类方法</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">cron表达式：</label>
+            <div class="layui-input-block">
+                <input class="layui-input" type="text" placeholder="参考：http://cron.qqe2.com/" name="cronExpression"
+                       id="cronExpression" lay-verify="required" lay-reqtext="cron表达式必填项，不能为空">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">执行策略：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="misfirePolicy" value="1" title="立即执行" checked>
+                <input type="radio" name="misfirePolicy" value="2" title="执行一次">
+                <input type="radio" name="misfirePolicy" value="3" title="放弃执行">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">并发执行：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="concurrent" value="0" title="允许"/>
+                <input type="radio" name="concurrent" value="1" title="禁止" checked="true"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="0" title="正常"/>
+                <input type="radio" name="status" value="1" title="暂停" checked="true"/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注：</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" name="remark" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="addSave">立即提交</button>
+                <button type=" reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+<script type="text/html" id="jobStatus">
+    <input type="checkbox" name="status" value="{{d.jobId}}" lay-skin="switch" lay-text="开启|关闭" lay-filter="jobStatus"
+           {{ d.status==0?'checked':'' }}>
+</script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addJob">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delJob">删除</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="runOne">执行一次</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">详细</a>
+</script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+
+    layui.use('table', function () {
+        var table = layui.table, form = layui.form;
+        var tableIns = table.render({
+            elem: '#quartzJobList',
+            url: '/quartzJob/queryAll',
+            height: 'full-94',
+            title: '定时任务查询',
+            toolbar: '#toolbarDemo',
+            page: true,
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'jobId', title: '任务ID', sort: true, width: 100}
+                    , {field: 'jobName', title: '任务名称'}
+                    , {field: 'jobGroup', title: '任务组名', sort: true}
+                    , {field: 'invokeTarget', title: '调用目标字符串'}
+                    , {field: 'cronExpression', title: 'cron执行表达式', width: 150}
+                    , {field: 'status', title: '任务状态', width: 100, templet: '#jobStatus', unresize: true}
+                    , {field: 'updateTime', title: '创建时间', sort: true, unresize: true}
+                    , {fixed: 'right', title: '操作', toolbar: '#barDemo', unresize: true}
+                ]
+            ]
+        });
+        //头工具栏事件 table lay-filter值
+        table.on('toolbar(quartzJobList)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'addJob'://新增
+                    openAddjob();
+                    break;
+                case 'delJob'://删除
+                    var data = checkStatus.data;
+                    if (data.length <= 0) {
+                        layer.msg("至少选择一项");
+                    } else {
+                        $.ajax({
+                            url: "/quartzJob/delJob",
+                            type: "POST",
+                            dataType: 'json',
+                            data: JSON.stringify(data),
+                            contentType: "application/json",
+                            success: function (result) {
+                                layer.msg(result.msg);
+                                reloadTable(1);
+                            }
+                        });
+                    }
+                    break;
+            }
+            ;
+        });
+
+        /**
+         * 初始化下拉框
+         * @param id 标签id属性
+         * @param url 路径
+         */
+        function initSelect(id, url) {
+            $.post(url, function (result) {
+                var data = result.data;
+                var arr = new Array();
+                arr.push("<option value=''>调用业务类</option>");
+                $.each(data, function (i, item) {
+                    var option = "<option value='" + item + "'>" + item + "</option>";
+                    arr.push(option);
+                })
+                $("#" + id).empty();
+                $("#" + id).append(arr.join(""));
+                form.render('select');
+                $("#invokeTarget").next().find('input').removeAttr("readonly");
+            })
+        }
+
+        var openAddjob = function () {
+            //打开新增先去查询调用目标字符串（就是任务）；
+            initSelect("clsaaName", "/quartzJob/queryClass");
+            layer.open({
+                title: '新增定时任务',
+                type: 1,
+                offset: '5px',
+                area: ['700px', '590px'],//定义宽和高
+                shadeClose: true,//点击遮罩层关闭
+                content: $('#quartzItem'),//打开的内容
+            });
+        };
+        //监听下拉选择
+        form.on('select(clsaaName)', function (data) {
+            initSelect("invokeTarget", "/quartzJob/queryMethod?className=" + data.value);
+
+        });
+
+        //监听开关
+        form.on('switch(jobStatus)', function (data) {
+            // console.log(data.elem.checked); //开关是否开启，true或者false
+            console.log(data.value); //开关value值，也可以通过data.elem.value得到
+            if (data.elem.checked) {
+                $.post("/quartzJob/resumeJob?jobId=" + data.value, function (result) {
+                    layer.msg(result.msg);
+                });
+            } else {
+                $.post("/quartzJob/pauseJob?jobId=" + data.value, function (result) {
+                    layer.msg(result.msg);
+                });
+            }
+        });
+        form.on('submit(addSave)', function (data) {
+            //  console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            //  console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            $.ajax({
+                url: "/quartzJob/saveJob",
+                type: "POST",
+                dataType: "json",
+                data: data.field,
+                beforeSend: function () {
+                    // data.elem.addClass("layui-btn-disabled");//禁止提交按钮防止数据重复提交
+                    this.layerIndex = layer.load(0, {
+                        shade: [0.5, '#393D49']
+                    });
+                },
+                success: function (result) {
+                    layer.msg(result.msg);
+                    layer.closeAll('page');//查看文档关闭层 还有另一种模式
+                    //重载数据
+                    reloadTable(1);
+                },
+                complete: function () {// 方法在 AJAX 请求完成时执行函数
+                    layer.close(this.layerIndex);//关闭表情
+                    // data.elem.removeClass("layui-btn-disabled");
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        table.on('tool(quartzJobList)', function (obj) {
+
+            var data = obj.data;
+            //执行一次
+            if (obj.event === 'runOne') {
+                $.ajax({
+                    url: "/quartzJob/run",
+                    dataType: "json",
+                    data: data,
+                    type: "POST",
+                    success: function (result) {
+                        layer.msg(result.msg)
+                    }
+                });
+            } else if (obj.event === 'edit') {
+                layer.prompt({
+                    formType: 2
+                    , value: data.email
+                }, function (value, index) {
+                    obj.update({
+                        email: value
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+        /**
+         * 当前页码
+         * @param page
+         */
+        function reloadTable(page) {
+            //重载数据
+            tableIns.reload({
+                page: {
+                    curr: page //重新从第 1 页开始
+                }
+            });
+        }
+    });
+</script>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车辆登记信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+    <style type="text/css">
+        .layui-card-body {
+            font-size: 13px;
+        }
+
+        .layui-form-label {
+            min-width: 130px;
+        }
+
+        .layui-input-block {
+            margin-left: 160px;
+        }
+
+        .layui-textarea {
+            min-height: 54px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" action="" lay-filter="component-form-element">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">车辆信息记录</div>
+                    <div class="layui-card-body">
+
+                        <div class="layui-row layui-col-space10 layui-form-item">
+                            <div class="layui-col-lg4">
+                                <label class="layui-form-label">驾驶员姓名：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="fullname" lay-verify="required" placeholder=""
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-col-lg4">
+                                <label class="layui-form-label">车牌号：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="fullname" lay-verify="required" placeholder=""
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-col-lg4">
+                                <label class="layui-form-label">电话：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="fullname" lay-verify="required" placeholder=""
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-col-lg4">
+                                <label class="layui-form-label">进厂时间：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="fullname" lay-verify="required" placeholder=""
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-lg2">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">是否空车：</label>
+                                <div class="layui-input-block">
+                                    <input type="checkbox" name="marriage" lay-skin="switch" lay-text="是|否">
+                                    <div class="layui-unselect layui-form-switch" lay-skin="_switch"><em>否</em><i></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-lg2">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">是否计量物资：</label>
+                                <div class="layui-input-block">
+                                    <input type="checkbox" name="marriage" lay-skin="switch" lay-text="是|否">
+                                    <div class="layui-unselect layui-form-switch" lay-skin="_switch"><em>否</em><i></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">记录车上装的东西：</label>
+                            <div class="layui-input-block">
+                                <textarea name="other" placeholder="" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否内部车辆：</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="marriage" lay-skin="switch" lay-text="是|否">
+                                <div class="layui-unselect layui-form-switch" lay-skin="_switch"><em>否</em><i></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">其它信息：</label>
+                            <div class="layui-input-block">
+                                <textarea name="other" placeholder="" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="component-form-element">立即提交
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">路线规划</div>
+                    <div class="layui-card-body">
+                        卡片式面板面板通常用于非白色背景色的主体内<br>
+                        从而映衬出边框投影
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">卡片面板</div>
+                    <div class="layui-card-body">
+                        卡片式面板面板通常用于非白色背景色的主体内<br>
+                        从而映衬出边框投影
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+</body>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    //注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+</script>
+</html>

@@ -1,0 +1,17 @@
+当执行工作流引擎里面的ModelSaveRestResource任意一个方法时（首次）会自动创建25 张表
+
+不过注意，事件监听是以#开头，人员控制是以$符号。
+
+修改 ：toolbar-controller.js 文件
+ closeEditor: function(services) {
+ $scope.saveAndClose = function () {
+ 上面这两个方法 直接关闭窗口
+
+
+ 在所有流程变量的顶部，有几个默认的对象可以在表达式中使用
+  1.execution：DelegateExecution保存了流程持续执行的相关信息
+  2.task：DelegateTask保存当前任务的相关信息
+  3.authenticatedUserId：已验证的用户id，如果没有用户的身份验证，变量时不可用的。
+
+  注意：不管是方法里面的变量还是表达式变量，都是单引号
+  ${audit='pass'}

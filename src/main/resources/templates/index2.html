@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>主页</title>
+<link rel="stylesheet" href="/layui/css/layui.css" />
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<div class="layui-logo">layui后台布局</div>
+			<ul class="layui-nav layui-layout-right">
+				<li class="layui-nav-item"><a href="javascript:;">控制台<span
+						class="layui-badge">9</span></a></li>
+				<li class="layui-nav-item"><a href="javascript:;">个人中心<span
+						class="layui-badge-dot"></span></a></li>
+				<li class="layui-nav-item" lay-unselect=""><a
+					href="javascript:;"><img src="//t.cn/RCzsdCq"
+						class="layui-nav-img" />我</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="javascript:;">修改信息</a>
+						</dd>
+						<dd>
+							<a href="javascript:;">安全管理</a>
+						</dd>
+						<dd>
+							<a href="javascript:;">退了</a>
+						</dd>
+					</dl></li>
+			</ul>
+			<ul class="layui-nav layui-layout-left">
+				<li class="layui-nav-item"><a href="">最新活动</a></li>
+				<li class="layui-nav-item layui-this"><a href="">产品</a></li>
+				<li class="layui-nav-item"><a href="">大数据</a></li>
+				<li class="layui-nav-item"><a href="javascript:;">解决方案</a>
+					<dl class="layui-nav-child">
+						<!-- 二级菜单 -->
+						<dd>
+							<a href="javascript:;">移动模块</a>
+						</dd>
+						<dd>
+							<a href="">后台模版</a>
+						</dd>
+						<dd>
+							<a href="">电商平台</a>
+						</dd>
+					</dl></li>
+				<li class="layui-nav-item"><a href="">社区</a></li>
+			</ul>
+		</div>
+		<div class="layui-side layui-bg-black">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul class="layui-nav layui-nav-tree " lay-filter="test">
+					<li class="layui-nav-item layui-nav-itemed"><a
+						href="javascript:;">权限管理</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="javascript:;" data-options="{url:'/',title:'设置权限'}">设置权限</a>
+							</dd>
+							<dd>
+								<a href="javascript:;" data-options="{url:'/',title:'查看权限'}">查看权限</a>
+							</dd>
+						</dl></li>
+					<li class="layui-nav-item"><a href="javascript:;">财务管理</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="javascript:;" data-options="{url:'/',title:'财务报表'}">财务报表</a>
+							</dd>
+							<dd>
+								<a href="javascript:;" data-options="{url:'/',title:'财务预算'}">财务预算</a>
+							</dd>
+							<dd>
+								<a href="javascript:;" data-options="{url:'/',title:'财务查看'}">财务查看</a>
+							</dd>
+						</dl></li>
+					<li class="layui-nav-item"><a href="javascript:;">菜单管理</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="javascript:;" data-options="{url:'/',title:'菜单修改'}">菜单修改</a>
+							</dd>
+						</dl></li>
+				</ul>
+			</div>
+		</div>
+		<!--中间主体-->
+		<div class="layui-body" id="container">
+			<div class="layui-tab" lay-filter="tabs" lay-allowclose="true">
+				<ul class="layui-tab-title">
+					<li class="layui-this">首页</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">首页内容</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="/layui/layui.js"></script>
+	<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+	<script>
+//注意：导航 依赖 element 模块，否则无法进行功能性操作
+layui.use('element', function(){
+  var element = layui.element;
+ //element.on('nav(test)', function (elem) {
+	  /*使用DOM操作获取超链接的自定义data属性值
+	  debugger
+	  var options = eval('(' + elem.context.children[1].dataset.options + ')');//eval函数把 json字符串装换成数组
+	  var url = options.url;
+	  var title = options.title;
+	  element.tabAdd('tabs', {
+	  title: title,
+	  content: '<iframe scrolling="auto" frameborder="0" src="' + url + '" style="width:100%;height:100%;"></iframe>',
+	  });
+	  });*/
+  /*使用下面的方式需要引用jquery*/
+   $('.layui-nav-child a').click(function () {
+  var options = eval('('+$(this).data('options')+')');
+  debugger
+  var url = options.url;
+  var title = options.title;
+  element.tabAdd('tabs',{
+  title : title,
+  content : '<iframe scrolling="auto" frameborder="0" src="'+url+'" style="width:100%;height:100%;"></iframe>'
+  });
+  });
+});
+</script>
+</body>
+</html>

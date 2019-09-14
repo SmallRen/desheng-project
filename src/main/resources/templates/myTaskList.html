@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>我的任务</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+    <style type="text/css">
+        #initMyTaskItem {
+            width: 50%;
+            height: 90%;
+            margin: 6px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid" id="myTaskApp">
+    <div class="layui-tab layui-tab-card" lay-filter="dome">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="beginTask"><i class="layui-icon layui-icon-tabs"></i>申请工作流程</li>
+            <li lay-id="runTask"><i
+                    class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>运行中流程
+            </li>
+            <li lay-id="endTask"><i class="layui-icon layui-icon-close-fill"></i>结束流程</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form" id="initMyTaskItem" lay-filter="initMyTaskItem">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请假类型</label>
+                        <div class="layui-input-block">
+                            <select name="processDefinitionKey" lay-filter="modeType" id="modeType">
+                                <option value="">请选择工作流程</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">开始时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="createTime" id="createTime" placeholder="yyyy-MM-dd HH:mm:ss"
+                                   lay-verify="required"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">结束时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="endTime" id="endTime" placeholder="yyyy-MM-dd HH:mm:ss"
+                                   lay-verify="required"
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">申请原因</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入内容" name="leaveMsg" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="text-align:center">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formTaskMode">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <table id="myTaskList" class="layui-table" lay-filter="myTaskList"></table>
+            </div>
+            <div class="layui-tab-item">
+                <table id="myEndTaskList" class="layui-table" lay-filter="myTaskList"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="initOpenTaskItem" style="display: none">
+    <table id="openTaskList" lay-filter="openTaskList" class="layui-table"></table>
+</div>
+
+</body>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-icon layui-icon-survey" lay-event="queryDynamic">查看动态</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="cancel">取消</a>
+</script>
+<script type="text/html" id="barEndDemo">
+    <a class="layui-btn layui-btn-xs layui-icon layui-icon-survey" lay-event="queryDynamic">查看动态</a>
+</script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/dateUtils.js"></script>
+<script type="text/javascript">
+    layui.use(['element', 'laydate', 'form', 'table'], function () {
+        var element = layui.element;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        //查询工作流模型
+        $.ajax({
+            url: "/activiti/deployModelList",
+            type: "GET",
+            dataType: "json",
+            success: function (result) {
+             //   console.log(result)
+                if (result.code == 0) {
+                    $.each(result.data, function (index, item) {
+                        var op = "<option value='" + item.key + "'>" + item.name + "</option>";
+                        $("#modeType").append(op);
+                        if (index == result.data.length - 1) {
+                            form.render('select');
+                        }
+                    })
+                }
+            }
+        });
+        var tableData = myrender('/leaveInfo/queryTaskByUserId', '#myTaskList','#barDemo');
+        var tableData1 = null;
+
+        function myrender(url, ementId,barDemo) {
+            var tt = table.render({
+                elem: ementId,
+                url: url,
+                height: 'full-100',
+                size: 'sm',
+                title: '用户任务表查询',
+                page: true,
+                cols: [
+                    [{
+                        field: 'id',
+                        title: 'ID',
+                        sort: true,
+                        width: 60
+                    }, {
+                        field: 'leaveMsg',
+                        title: '任务描述',
+                        sort: true
+                    }, {
+                        field: 'status',
+                        title: '状态',
+                        width: 100,
+                        sort: true,
+                        templet: function (d) {
+                            if (d.status == '' || d.status == null) {
+                                return "等待审批";
+                            } else if (d.status == 'ing') {
+                                return "<button type='button' class='layui-btn layui-btn-xs'>审批中</button>";
+                            } else {
+                                return d.status == "pass" ? "通过" : "驳回";
+                            }
+                        }
+                    }, {
+                        field: 'createTime',
+                        title: '创建时间',
+                        width: 150,
+                        sort: true
+                    }, {
+                        field: 'endTime',
+                        title: '结束时间',
+                        width: 150,
+                        sort: true
+                    }, {
+                        field: 'updateTime',
+                        title: '审批时间',
+                        width: 150,
+                        sort: true
+                    }, {
+                        fixed: 'right',
+                        title: '操作',
+                        toolbar:barDemo,
+                    }
+                    ]
+                ]
+            });
+            return tt;
+        };
+        table.on('tool(myTaskList)', function (obj) {
+            var data = obj.data;
+         //   console.log(data)
+            if (obj.event === 'queryDynamic') {//查看动态
+                layer.open({
+                    title: '审批信息',
+                    area: ['750px', '500px'],//定义宽和高
+                    shadeClose: true,//点击遮罩层关闭
+                    type: 1,
+                    content: $('#initOpenTaskItem'),//打开的内容
+                });
+                table.render({
+                    elem: '#openTaskList',
+                    url: '/leaveInfo/leaveInfoUser',
+                    where: {leaveInfoId: data.id},
+                    height: 330,
+                    size: 'sm',
+                    cols: [
+                        [{
+                            field: 'username',
+                            title: '审批人',
+                            sort: true
+                        }, {
+                            field: 'spUserStatus',
+                            title: '状态',
+                            width: 100,
+                            sort: true,
+                            templet: function (d) {
+                                if (d.spUserStatus == '' || d.spUserStatus == null) {
+                                    return "等待审批";
+                                } else {
+                                    return d.spUserStatus == "pass" ? "<button type='button' class='layui-btn layui-btn-xs'>通过</button>" :
+                                        "<button type='button' class='layui-btn layui-btn-warm layui-btn-xs'>驳回</button>";
+                                }
+                            }
+                        }, {
+                            field: 'spTime',
+                            title: '审批时间',
+                            sort: true
+                        }]
+                    ]
+                });
+
+            } else if (obj.event === 'cancel') {//取消流程
+                return false;
+                $.ajax({
+                    url: "/leaveInfo/removeTask",
+                    type: "post",
+                    dataType: 'json',
+                    data: {deploymentId: data.deploymentId, id: data.id},
+                    success: function (result) {
+
+                    }
+                });
+
+            }
+        });
+
+        //日期时间选择器
+        laydate.render({
+            elem: '#createTime'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endTime'
+            , type: 'datetime'
+        });
+        form.on('submit(formTaskMode)', function (data) {
+            if (data.field.leaveMsg == "") {
+                layer.msg("申请原因不能为空");
+                return false;
+            }
+            $.ajax({
+                url: "/leaveInfo/addLeaveInfo",
+                data: $("#initMyTaskItem").serialize(),
+                type: "POST",
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (result.status == 200) {
+                        layer.msg(result.msg);
+                        element.tabChange('dome', 'runTask');//切换选项卡
+                        //重载数据
+                        tableData.reload({
+                            page: {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        });
+                    }
+                }
+            });
+            return false; //阻止跳转，不然会刷新一下
+        });
+        element.on('tab(dome)', function (data) {
+            if (data.index == 2) {
+                tableData1 = myrender('/leaveInfo/queryEndTaskByUserId', '#myEndTaskList','#barEndDemo');
+            } else if (data.index == 1) {
+                //重载数据
+                tableData.reload({
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+            }
+          //  console.log(data.index); //得到当前Tab的所在下标
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>角色表</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+</head>
+<body>
+<h6>先个角色设置权限再给用户设置角色</h6>
+<table id="roleList" class="layui-hide" lay-filter="userList">
+</table>
+
+
+</body>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-icon layui-icon-auz" lay-event="authorize">分配菜单和授权</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script src="/js/xtree.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    /**
+     * 全局ajax处理
+     $( document ).ajaxComplete(function( event, xhr, settings ) {
+	var data=JSON.parse(xhr.responseText);
+	    if(data.status==100){	
+	    	layer.msg(data.msg);
+	    	return false;
+	    }
+	});
+     */
+
+    layui.use('table', function () {
+        var table = layui.table;
+        var xtree;
+        var tableIns = table.render({
+            elem: '#roleList',
+            url: '/user/roleList',
+            method: 'POST',
+            height: 'full-94',
+            size: 'sm',
+            title: '用户表查询',
+            toolbar: true,
+            page: true,
+            totalRow: true,
+            cols: [
+                [{
+                    type: 'checkbox',
+                    totalRowText: '合计行'
+                }, {
+                    field: 'id',
+                    title: 'ID',
+                    sort: true,
+                    width: 60,
+                    totalRow: true
+                }, {
+                    field: 'name',
+                    title: '角色名称'
+                }, {
+                    field: 'description',
+                    title: '角色描述',
+                    sort: true
+                }, {
+                    field: 'status',
+                    title: '状态',
+                    width: 100,
+                    sort: true,
+                    templet: function (d) {
+                        return d.status == 1 ? "正常" : "删除";
+                    }
+                }, {
+                    field: 'createTime',
+                    title: '创建时间',
+                    width: 150,
+                    sort: true
+                }, {
+                    fixed: 'right',
+                    title: '操作',
+                    width: 180,
+                    toolbar: '#barDemo',
+                }]
+            ]
+        });
+        //监听行工具事件 table lay-filter值
+        table.on('tool(userList)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么' + data.id, function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'authorize') {
+                $.ajax({
+                    url: "/main/tree",
+                    dataType: "json",
+                    data: {"rid": data.id},
+                    type: "POST",
+                    success: function (result) {
+                        if (result.status == 100) {
+                            layer.msg(result.msg);
+                        } else {
+                            open(data);
+                            layui.use('form', function () {
+                                var form = layui.form;
+                                //创建tree
+                                xtree = new layuiXtree({
+                                    elem: 'xtree1' //标签放xtree的容器（必填，只能为id，注意不带#号）
+                                    , form: form              //layui form对象 （必填）
+                                    , data: result  //数据，结构请参照下面 （必填） 也可以写路径 '/main/tree'
+                                    , ckall: true
+                                    , isopen: false            //初次加载时全部展开，默认true （选填）
+                                    , color: {       //三种图标颜色，独立配色，更改几个都可以
+                                        open: "#EE9A00"        //节点图标打开的颜色
+                                        , close: "#EEC591"     //节点图标关闭的颜色
+                                        , end: "#828282"       //末级节点图标的颜色
+                                    }
+                                    , icon: {                 //图标样式 （选填）
+                                        open: "&#xe625;"      //节点打开的图标（使用layui的图标，这里只填入图标代号即可）
+                                        , close: "&#xe623;"   //节点关闭的图标
+                                        , end: "&#xe614;"     //末尾节点的图标
+                                    }
+                                });
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        layer.msg("异常提示：请刷新页面");
+                    },
+                });
+            }
+        });
+
+        /**
+         * 弹出窗口
+         * @param data
+         */
+        function open(data) {
+            layer.open({
+                title: '在线调试',
+                area: ['450px', '400px'],//定义宽和高
+                shadeClose: true,//点击遮罩层关闭
+                type: 1,
+                btn: ['确定', '关闭'],
+                content: '<form class="layui-form"><div id="xtree1" style="width:400px;border:1px solid black;padding: 10px 0 25px 5px;margin:5px auto"></div></form>',//打开的内容
+                yes: function (index) {
+                    //按钮【按钮一】的回调
+                    var oCks = xtree.GetChecked(); //获取全部选中的末级节点checkbox对象，返回的为Array
+                    //	console.log(oCks);
+                    var mycars = new Array();
+                    for (var i = 0; i < oCks.length; i++) {
+                        mycars.push(oCks[i].value);
+                    }
+                    $.ajax({
+                        url: "/main/permission",
+                        type: "POST",
+                        dataType: "json",
+                        data: {"id": data.id, "pid": mycars},
+                        success: function (result) {
+                            if (result.status == 200) {
+                                layer.msg(result.msg);
+                            } else {
+                                layer.msg(result.msg);
+                            }
+                        }, error: function (result) {
+                            layer.msg("异常提示：请刷新页面");
+                        },
+                    });
+                    layer.close(index);
+                }
+            });
+        }
+    });
+</script>
+</html>

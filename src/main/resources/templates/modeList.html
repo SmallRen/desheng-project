@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工作流页面</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+    <style type="text/css">
+        #modeItem {
+            width: 80%;
+            height: 90%;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid" id="modeListApp">
+    <button class="layui-btn layui-btn-sm" id="newMode">新增</button>
+    <table id="modeList" class="layui-table" lay-filter="modeList"></table>
+</div>
+<script type="text/html" id="actionBar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" href="/modeler.html?modelId={{d.id}}"
+       target="_blank">在线设计</a>
+    <a class="layui-btn layui-btn-xs" lay-event="deploy">部署流程</a>
+    <a href="/activiti/export?modelId={{d.id}}"
+       class="layui-btn layui-btn-danger layui-btn-xs">导出</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<div style="display: none;" id="modeItem">
+    <form class="layui-form" id="initModeItem" lay-filter="initModeItem">
+        <div class="layui-form-item">
+            <label class="layui-form-label">模型名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" placeholder="请输入" required lay-verify="required" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模型描述</label>
+            <div class="layui-input-block">
+                <input type="text" name="description" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">唯一标识</label>
+            <div class="layui-input-block">
+                <input type="text" name="key" placeholder="请输入" required lay-verify="required" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formMode">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+</body>
+
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/dateUtils.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'form'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        var tableData = table.render({
+            elem: '#modeList',
+            url: '/activiti/modelist',
+            height: 'full-94',
+            title: '工作流页查询',
+            page: true,
+            size: 'sm',
+            cols: [
+                [
+                    {field: 'id', title: 'ID', width: 80},
+                    {field: 'name', title: '流程名称', width: 200},
+                    {field: 'version', title: '版本', width: 100},
+                    {field: 'deploymentId', title: '部署ID', width: 100},
+                    {
+                        field: 'createTime', title: '创建时间', width: 200, templet: function (data) {
+                            if (data.createTime != null) {
+                                var date = new Date(data.createTime);
+                                return dateFtt("yyyy-MM-dd hh:mm:ss", date);
+                            }
+                        }
+                    },
+                    {
+                        field: 'lastUpdateTime', title: '最后更新时间', width: 200, templet: function (data) {
+                            if (data.createTime != null) {
+                                var date = new Date(data.createTime);
+                                //调用公共JS里面的时间类处理的方法
+                                return dateFtt("yyyy-MM-dd hh:mm:ss", date);
+                            }
+                        }
+                    },
+                    {fixed: 'right', title: '操作', templet: "#actionBar", unresize: true}
+                ]
+            ]
+        });
+        //监听行工具事件 table lay-filter值msg
+        table.on('tool(modeList)', function (obj) {
+            var data = obj.data;
+            if (obj.event == 'deploy') {
+                sendAjax('deploy', data.id);
+            } else if (obj.event == 'del') {
+                sendAjax('delete', data.deploymentId);
+            }
+            //重载数据
+            tableData.reload({
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+        $("#newMode").click(function () {
+            layer.open({
+                title: '新增流程'
+                , content: $('#modeItem')
+                , type: 1
+                , area: ['400px', '300px']//定义宽和高
+                , shadeClose: true//点击遮罩层关闭
+            });
+        });
+        form.on('submit(formMode)', function (data) {
+            if (data.field.name == "") {
+                layer.msg("模型名称不能为空")
+                return false;
+            } else if (data.field.key == "") {
+                layer.msg("模型唯一标识不能为空")
+                return false;
+            }
+            $.ajax({
+                url: "/activiti/create",
+                data: $("#initModeItem").serialize(),
+                type: "POST",
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    console.log(result)
+                    if (result.status == 200) {
+                        layer.msg(result.msg);
+                        window.open(result.data);
+                    }
+                }
+            });
+        });
+
+
+    });
+    var sendAjax = function (path, id) {
+        $.ajax({
+            url: "/activiti/" + path + "/" + id,
+            type: "POST",
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                if (result.status == 200) {
+                    layer.msg(result.msg)
+                } else {
+                    layer.msg(result.msg)
+                }
+            }
+        });
+    }
+</script>
+</html>

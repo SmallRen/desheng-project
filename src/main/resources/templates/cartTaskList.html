@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <table id="cartTaskList" lay-filter="cartTaskList"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/html" id="toolbarUtil">
+    <button class="layui-btn layui-btn-sm" lay-event="newPCD">新增派车单</button>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs " lay-event="scrap">报废</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="copy">复制</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs {{d.gdStatus==1 ? 'layui-hide' : ''}}" lay-event="update">修改</a>
+</script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    var jsonData = null;
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: "#cartTaskList",
+            url: '/wzItf/queryWzItf',
+            method: 'POST',
+            height: 'full-94',
+            size: 'sm',
+            title: '用户登陆日志记录',
+            toolbar: "#toolbarUtil",
+            defaultToolbar: ['filter', 'print', 'exports'],
+            page: true,
+            limit: 20,
+            initSort: {
+                field: 'createTiem' //排序字段，对应 cols 设定的各字段名
+                , type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            },
+            cols: [
+                [{
+                    field: 'gdMark',
+                    title: '工单号',
+                    width: 160
+                }, {
+                    field: 'status',
+                    title: '状态',
+                    sort: true,
+                    width: 90,
+                    templet: function (data) {
+                        if (data.gdStatus == 0) {
+                            return "暂停";
+                        } else if (data.gdStatus == 1) {
+                            return "进行中";
+                        } else if (data.gdStatus == 2) {
+                            return "报废";
+                        } else if (data.gdStatus == 3) {
+                            return "完成";
+                        }
+                    }
+                }, {
+                    field: 'ywType',
+                    title: '业务类型',
+                    width: 110,
+                    templet: function (data) {
+                        if (data.ywType == 1) {
+                            return "非内转不计量";
+                        } else if (data.ywType == 2) {
+                            return "内转不计量";
+                        } else if (data.ywType == 3) {
+                            return "内转计量";
+                        }
+                    }
+
+                }, {
+                    field: 'ewmType',
+                    title: '二维码类型',
+                    sort: true,
+                    align: 'center',
+                    width: 110
+                }, {
+                    field: 'cph',
+                    title: '车牌号',
+                    width: 80
+                }, {
+                    field: 'wzItfDetailed',
+                    title: '物资及数量',
+                    width: 200,
+                    /*templet: function (data) {
+                        return "<button type='button' class='layui-btn layui-btn-xs' onclick=showDetailed('" + data.id + "')>查看信息</button>";
+                    }*/
+                }, {
+                    field: 'wzWorkLine',
+                    title: '进出厂路线',
+                    width: 200,
+                    /* templet: function (data) {
+                         return "<button type='button' class='layui-btn layui-btn-xs' onclick=showWzLine('" + data.id + "')>查看信息</button>";
+                     }*/
+                }, {
+                    field: 'fhUnit',
+                    title: '发货单位',
+                    width: 150,
+                }, {
+                    field: 'shUnit',
+                    title: '收货单位',
+                    width: 150,
+                }, {
+                    field: 'createUnit',
+                    title: '创建单位',
+                    width: 150,
+                }, {
+                    field: 'createPerson',
+                    title: '创建人',
+                    width: 80,
+                }, {
+                    field: 'createTiem',
+                    title: '创建时间',
+                    width: 150,
+                }, {
+                    field: 'cph',
+                    title: '车牌号',
+                    width: 80,
+                }, {
+                    fixed: 'right',
+                    title: '操作',
+                    toolbar: '#barDemo',
+                    width: 220
+                }
+
+                ]
+            ]
+        });
+        //监听行工具条
+        table.on('tool(cartTaskList)', function (obj) {
+            var data = obj.data; //获得当前行数据
+            jsonData = JSON.stringify(data);//用于打开iframe里面获取父页面的值
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            console.log(jsonData);
+
+            if (layEvent === 'scrap') { //报废
+                //do somehing
+            } else if (layEvent === 'del') { //删除
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if (layEvent === 'copy') { //复制
+
+            } else if (layEvent === 'update') { //修改
+                var height = $("#iframepage", parent.document).height() + "px";
+                var width = $(document.body).width() + "px";
+                layer.open({
+                    title: '新增派车单',
+                    type: 2,
+                    area: [width, height],
+                    content: '/page/manage/editCartTask',
+                    move: false,//来禁止拖拽
+                });
+
+            }
+        });
+
+        //监听头部工具栏事件
+        table.on('toolbar(cartTaskList)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'newPCD'://新增派车单
+                    var height = $("#iframepage", parent.document).height() + "px";
+                    var width = $(document.body).width() + "px";
+                    layer.open({
+                        title: '新增派车单',
+                        type: 2,
+                        area: [width, height],
+                        content: '/page/manage/newCartTask'
+                        , move: false//来禁止拖拽
+                    });
+
+                    break;
+                case 'delete':
+                    layer.msg('删除');
+                    break;
+                case 'update':
+                    layer.msg('编辑');
+                    break;
+            }
+            ;
+        });
+        //点击查看物资信息事件
+        window.showDetailed = function (wz_id) {
+            layer.open({
+                title: '物资及数量信息',
+                area: ['750px', '500px'],//定义宽和高
+                shadeClose: true,//点击遮罩层关闭
+                btn: ['关闭'],
+                btnAlign: 'c',
+                type: 1,
+                content: '<table id="wzDetailedList" style="margin:5px auto"></table>',//打开的内容
+            });
+
+            table.render({
+                elem: '#wzDetailedList',
+                url: '/wzItf/queryWzItDetailedById/' + wz_id,
+                height: 330,
+                size: 'sm',
+                cols: [
+                    [
+                        {
+                            type: 'checkbox'
+                        }, {
+                        field: 'id',
+                        title: 'ID',
+                        sort: true,
+                        width: 60,
+                        totalRow: true
+                    }, {
+                        field: 'wzName',
+                        title: '物资名称',
+                        width: 150,
+                    }, {
+                        field: 'wzNumber',
+                        title: '物资数量',
+                    }, {
+                        field: 'wzScode',
+                        title: '物资编码',
+                    }, {
+                        field: 'wzSspce',
+                        title: '物资规格',
+                        sort: true,
+
+                    }]
+                ]
+            });
+        };
+        //点击查看物资信息事件
+        window.showWzLine = function (wz_id) {
+            layer.open({
+                title: '物资及数量信息',
+                area: ['750px', '500px'],//定义宽和高
+                shadeClose: true,//点击遮罩层关闭
+                btn: ['关闭'],
+                btnAlign: 'c',
+                type: 1,
+                content: '<table id="wzLineList" style="margin:5px auto"></table>',//打开的内容
+            });
+
+            table.render({
+                elem: '#wzLineList',
+                url: '/wzItf/queryWzWorkLineById/' + wz_id,
+                height: 330,
+                size: 'sm',
+                cols: [
+                    [
+                        {
+                            type: 'checkbox'
+                        }, {
+                        field: 'id',
+                        title: 'ID',
+                        sort: true,
+                        width: 60,
+                        totalRow: true
+                    }, {
+                        field: 'point1',
+                        title: '点一',
+                        width: 150,
+                    }, {
+                        field: 'wzNumber',
+                        title: '物资数量',
+                    }, {
+                        field: 'wzScode',
+                        title: '物资编码',
+                    }, {
+                        field: 'wzSspce',
+                        title: '物资规格',
+                        sort: true,
+
+                    }]
+                ]
+            });
+        };
+
+    });
+</script>
+</html>

@@ -130,72 +130,72 @@ public class WzItfServiceImpl implements WzItfService {
         for (WzWorkLine wzWorkLine : wzWorkLines) {
             //如果只有一个点 直接结束循环
             if (wzWorkLine.getPoint1() != null && wzWorkLine.getPoint2() == null) {
-                str.append(wzWorkLine.getPoint1Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint1());
+                str.append(wzWorkLine.getPoint1Turnover()+ ":" + wzWorkLine.getPoint1());
                 break;
             }
             if (wzWorkLine.getPoint2() != null) {//第一个点到第二个点的 间隔时间
-                str.append(wzWorkLine.getPoint1Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint1() + "→" +
-                        wzWorkLine.getPoint2Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint2() + " " + wzWorkLine.getPoint1Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint1Turnover()+ ":" + wzWorkLine.getPoint1() + "→" +
+                        wzWorkLine.getPoint2Turnover()+ ":" + wzWorkLine.getPoint2() + " " + wzWorkLine.getPoint1Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint3() != null) {
-                str.append(wzWorkLine.getPoint2Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint2() + "→" +
-                        wzWorkLine.getPoint3Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint3() + " " + wzWorkLine.getPoint2Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint2Turnover()+ ":" + wzWorkLine.getPoint2() + "→" +
+                        wzWorkLine.getPoint3Turnover()+ ":" + wzWorkLine.getPoint3() + " " + wzWorkLine.getPoint2Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint4() != null) {
-                str.append(wzWorkLine.getPoint3Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint3() + "→" +
-                        wzWorkLine.getPoint4Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint4() + " " + wzWorkLine.getPoint3Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint3Turnover()+ ":" + wzWorkLine.getPoint3() + "→" +
+                        wzWorkLine.getPoint4Turnover()+ ":" + wzWorkLine.getPoint4() + " " + wzWorkLine.getPoint3Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint5() != null) {
-                str.append(wzWorkLine.getPoint4Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint4() + "→" +
-                        wzWorkLine.getPoint5Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint5() + " " + wzWorkLine.getPoint4Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint4Turnover()+ ":" + wzWorkLine.getPoint4() + "→" +
+                        wzWorkLine.getPoint5Turnover()+ ":" + wzWorkLine.getPoint5() + " " + wzWorkLine.getPoint4Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint6() != null) {
-                str.append(wzWorkLine.getPoint5Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint5() + "→" +
-                        wzWorkLine.getPoint6Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint6() + " " + wzWorkLine.getPoint5Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint5Turnover()+ ":" + wzWorkLine.getPoint5() + "→" +
+                        wzWorkLine.getPoint6Turnover()+ ":" + wzWorkLine.getPoint6() + " " + wzWorkLine.getPoint5Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint7() != null) {
-                str.append(wzWorkLine.getPoint6Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint6() + "→" +
-                        wzWorkLine.getPoint7Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint7() + " " + wzWorkLine.getPoint6Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint6Turnover()+ ":" + wzWorkLine.getPoint6() + "→" +
+                        wzWorkLine.getPoint7Turnover()+ ":" + wzWorkLine.getPoint7() + " " + wzWorkLine.getPoint6Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint8() != null) {
-                str.append(wzWorkLine.getPoint7Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint7() + "→" +
-                        wzWorkLine.getPoint8Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint8() + " " + wzWorkLine.getPoint7Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint7Turnover()+ ":" + wzWorkLine.getPoint7() + "→" +
+                        wzWorkLine.getPoint8Turnover()+ ":" + wzWorkLine.getPoint8() + " " + wzWorkLine.getPoint7Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint9() != null) {
-                str.append(wzWorkLine.getPoint8Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint8() + "→" +
-                        wzWorkLine.getPoint9Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint9() + " " + wzWorkLine.getPoint8Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint8Turnover()+ ":" + wzWorkLine.getPoint8() + "→" +
+                        wzWorkLine.getPoint9Turnover()+ ":" + wzWorkLine.getPoint9() + " " + wzWorkLine.getPoint8Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint10() != null) {
-                str.append(wzWorkLine.getPoint9Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint9() + "→" +
-                        wzWorkLine.getPoint10Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint10() + " " + wzWorkLine.getPoint9Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint9Turnover()+ ":" + wzWorkLine.getPoint9() + "→" +
+                        wzWorkLine.getPoint10Turnover()+ ":" + wzWorkLine.getPoint10() + " " + wzWorkLine.getPoint9Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint11() != null) {
-                str.append(wzWorkLine.getPoint10Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint10() + "→" +
-                        wzWorkLine.getPoint11Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint11() + " " + wzWorkLine.getPoint10Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint10Turnover()+ ":" + wzWorkLine.getPoint10() + "→" +
+                        wzWorkLine.getPoint11Turnover()+ ":" + wzWorkLine.getPoint11() + " " + wzWorkLine.getPoint10Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint12() != null) {
-                str.append(wzWorkLine.getPoint11Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint11() + "→" +
-                        wzWorkLine.getPoint12Turnover().toCharArray()[2] + ":" + wzWorkLine.getPoint12() + " " + wzWorkLine.getPoint11Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint11Turnover()+ ":" + wzWorkLine.getPoint11() + "→" +
+                        wzWorkLine.getPoint12Turnover()+ ":" + wzWorkLine.getPoint12() + " " + wzWorkLine.getPoint11Time() + "分钟 ");
             } else {
                 break;
             }

@@ -42,8 +42,8 @@ public class WzItfServiceImpl implements WzItfService {
         //1.先插入表头信息 成功后才执行 插入路线 和插入物资
         String gdh = DateUtils.getDocumentNumber();//生产工单号
         wzItf.setGdMark(gdh);
-        //sql返回自增ID
         try {
+            //sql返回自增ID
             int b = wzItfMapper.insertSelective(wzItf);
             if (b <= 0) {
                 return ResultMsg.failure("工单保存失败！请检查工单录入信息");
@@ -85,7 +85,7 @@ public class WzItfServiceImpl implements WzItfService {
                 map.clear();
                 map.put("pointSlicer", 2);
                 map.put("wzItfId", wzItf.getId());
-                map.put("pointNumber", points.length);
+                // map.put("pointNumber", points.length);
                 int i = wzWorkLineMapper.insertSelectiveMap(map);
                 if (i < 0) {
                     return ResultMsg.failure("物资路线点位保存失败！请检查工单物资路线点位信息");
@@ -111,6 +111,7 @@ public class WzItfServiceImpl implements WzItfService {
                 List<WzItfDetailed> wzItfDetaileds = wzItfDetailedMapper.selectByExample(wzItfDetailedExample);
                 StringBuilder str = new StringBuilder();
                 for (WzItfDetailed wzItfDetailed : wzItfDetaileds) {
+                    //拼 成 物资x数量
                     str.append(wzItfDetailed.getWzName() + "x" + wzItfDetailed.getWzNumber() + " ");
                 }
                 //set物资
@@ -255,6 +256,62 @@ public class WzItfServiceImpl implements WzItfService {
             return wzItfVo;
         }
         return null;
+    }
+
+    /**
+     * 根据工单ID 复制此工单
+     *
+     * @param id  工单ID
+     * @param num 复制数量
+     * @return
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public int copyWzItfGd(Integer id, Integer num) throws Exception {
+        for (int j = 0; j < num; j++) {
+            try {
+                //1查询工单信息
+                WzItf wzItf = wzItfMapper.selectByPrimaryKey(id);
+                String gdh = DateUtils.getDocumentNumber();//生产工单号
+                wzItf.setGdMark(gdh);
+                wzItf.setId(null);//把ID设为null 不能插入ID 因为是主键
+                int i = wzItfMapper.insertSelective(wzItf); //返回自增ID
+                //插入新工单成功 就插入路线和物资
+                if (i > 0) {
+                    //2.根据工单ID 查询物资 和线路
+                    WzItfDetailedExample wzItfDetailedExample = new WzItfDetailedExample();
+                    //根据物资主键查询对应的物资清单
+                    wzItfDetailedExample.createCriteria().andWzItfIdEqualTo(id);
+                    List<WzItfDetailed> wzItfDetaileds = wzItfDetailedMapper.selectByExample(wzItfDetailedExample);
+                    for (WzItfDetailed wzItfDetailed : wzItfDetaileds) {
+                        wzItfDetailed.setWzItfId(wzItf.getId());//取出自增ID
+                        wzItfDetailed.setId(null);
+                        wzItfDetailedMapper.insertSelective(wzItfDetailed);
+                    }
+
+                    //查询系统的路线只查询系统路线
+                    WzWorkLineExample wzWorkLineExample = new WzWorkLineExample();
+                    //1是系统路线 2实际路线
+                    wzWorkLineExample.createCriteria().andWzItfIdEqualTo(id).andPointSlicerEqualTo(1);
+                    List<WzWorkLine> wzWorkLines = wzWorkLineMapper.selectByExample(wzWorkLineExample);
+                    for (WzWorkLine wzWorkLine : wzWorkLines) {
+                        wzWorkLine.setWzItfId(wzItf.getId());//取出自增ID
+                        wzWorkLine.setId(null);
+                        int i1 = wzWorkLineMapper.insertSelective(wzWorkLine);//插入系统路线
+                        if (i1 > 0) {
+                            WzWorkLine wzWorkLine1 = new WzWorkLine();//插入人工路线
+                            wzWorkLine1.setWzItfId(wzItf.getId());//取出自增ID
+                            wzWorkLine1.setPointSlicer(2);//人工标识
+                            wzWorkLineMapper.insertSelective(wzWorkLine1);//插入系统路线
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                throw e;
+            }
+        }
+        return 1;
     }
 
     @Override

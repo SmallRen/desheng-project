@@ -112,4 +112,26 @@ public class WzItfController {
         return result;
     }
 
+    /**
+     * 根据工单ID 复制此工单
+     *
+     * @param id  工单ID
+     * @param num 复制数量
+     * @return
+     */
+    @RequestMapping("/wzItf/copyWzItfGd")
+    @ResponseBody
+    public Object copyWzItfGd(Integer id, @RequestParam(value = "num", defaultValue = "1") Integer num) {
+        try {
+            int i = wzItfService.copyWzItfGd(id, num);
+            return ResultMsg.success("复制成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultMsg.success("复制失败");
+        }
+
+
+    }
+
+
 }

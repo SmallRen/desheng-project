@@ -49,6 +49,15 @@ public interface WzItfService {
     WzItfVo queryWzItfById(Integer id);
 
     /**
+     * 根据工单ID 复制此工单
+     *
+     * @param id  工单ID
+     * @param num 复制数量
+     * @return
+     */
+    int copyWzItfGd(Integer id, Integer num) throws Exception;
+
+    /**
      * 进行工单超时查询并发送超时消息
      */
     void executeTimeOut();

@@ -39,6 +39,7 @@
         table.render({
             elem: "#cartTaskList",
             url: '/wzItf/queryWzItf',
+            id: 'wzItfList',
             method: 'POST',
             height: 'full-94',
             size: 'sm',
@@ -149,7 +150,7 @@
             var data = obj.data; //获得当前行数据
             jsonData = JSON.stringify(data);//用于打开iframe里面获取父页面的值
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-            console.log(jsonData);
+            //console.log(jsonData);
 
             if (layEvent === 'scrap') { //报废
                 //do somehing
@@ -160,6 +161,45 @@
                     //向服务端发送删除指令
                 });
             } else if (layEvent === 'copy') { //复制
+                layer.open({
+                    type: 1,
+                    offset: '100px',
+                    content: '<div style="padding: 15px;"><input type="text" name="num" required lay-verify="required" placeholder="复制次数默认为1次" autocomplete="off" class="layui-input"> </div>',
+                    btn: '确认',
+                    btnAlign: 'c', //按钮居中
+                    yes: function (index, layero) { //layero弹出dom对象
+                        var num = layero.find("input[name='num']").val();
+                        $.ajax({
+                            url: '/wzItf/copyWzItfGd',
+                            data: {num: num, id: data.id},
+                            dataType: 'json',
+                            type: "POST",
+                            beforeSend: function () {
+                                this.layerIndex = layer.load(0, {
+                                    shade: [0.5, '#393D49']
+                                });
+                            },
+                            success: function (result) {
+                                if (result.status == 200) {
+                                    layer.msg(result.msg);
+                                    table.reload('wzItfList', {
+                                        page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                    }); //只重载数据
+                                } else {
+                                    layer.msg(result.msg);
+                                }
+                                layer.close(index);
+                            },
+
+                            complete: function () {// 方法在 AJAX 请求完成时执行函数
+                                layer.close(this.layerIndex);//关闭表情
+                            }
+                        });
+                    }
+                });
+
 
             } else if (layEvent === 'update') { //修改
                 var height = $("#iframepage", parent.document).height() + "px";

@@ -64,6 +64,8 @@ public class WzItf {
 
     private String[] wzSspce; //物资规格
 
+    private String[] point;//物资线路
+
     public String[] getWzName() {
         return wzName;
     }
@@ -238,5 +240,13 @@ public class WzItf {
 
     public void setGdMark(String gdMark) {
         this.gdMark = gdMark == null ? null : gdMark.trim();
+    }
+
+    public String[] getPoint() {
+        return point;
+    }
+
+    public void setPoint(String[] point) {
+        this.point = point;
     }
 }

@@ -37,9 +37,14 @@ public class WzItfController {
      */
     @RequestMapping("/wzItf/addNewWzItf")
     @ResponseBody
-    public Object addNewWzItf(WzItf wzItf, @RequestParam("points") String[] points, @RequestParam("turnover") String[] turnover) {
-        Object obj = wzItfService.addNewWzItf(wzItf, points, turnover);
-        return obj;
+    public Object addNewWzItf(WzItf wzItf) {
+        try {
+            Map<String, Object> obj = wzItfService.addNewWzItf(wzItf);
+            return obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultMsg.success("工单保存失败");
+        }
     }
 
     /***

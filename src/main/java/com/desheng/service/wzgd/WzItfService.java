@@ -6,17 +6,16 @@ import com.desheng.pojo.WzWorkLine;
 import com.desheng.vo.WzItfVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface WzItfService {
     /**
      * 新增物资工单
      *
-     * @param wzItf    工单信息 里面包含物资信息
-     * @param points   点位
-     * @param turnover 点位对应的路线
+     * @param wzItf 工单信息 里面包含物资信息
      * @return
      */
-    Object addNewWzItf(WzItf wzItf, String[] points, String[] turnover);
+    Map<String, Object> addNewWzItf(WzItf wzItf) throws Exception;
 
     /**
      * 查询工单列表

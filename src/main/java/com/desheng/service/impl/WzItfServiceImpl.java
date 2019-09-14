@@ -29,56 +29,61 @@ public class WzItfServiceImpl implements WzItfService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public Object addNewWzItf(WzItf wzItf, String[] points, String[] turnover) {
-        if ((points == null && points.length < 0) || (turnover == null && turnover.length < 0)) {
-            return ResultMsg.failure("路线不能为空");
-        }
+    public Map<String, Object> addNewWzItf(WzItf wzItf) throws Exception {
         //1.先插入表头信息 成功后才执行 插入路线 和插入物资
         String gdh = DateUtils.getDocumentNumber();//生产工单号
         wzItf.setGdMark(gdh);
         //sql返回自增ID
-        int b = wzItfMapper.insertSelective(wzItf);
-        if (b <= 0) {
-            return ResultMsg.failure("工单保存失败！请检查工单录入信息");
-        }
-        //插入物资
-        String[] wzName = wzItf.getWzName(); //物资名称
-        String[] wzNumber = wzItf.getWzNumber();//物资数量
-        String[] wzSspce = wzItf.getWzSspce();//物资规格
-        if (wzName != null && wzName.length > 0) {//当物资不为空的时候才记录物资信息
-            for (int i = 0; i < wzName.length; i++) {
-                WzItfDetailed wzItfDetailed = new WzItfDetailed();
-                wzItfDetailed.setWzName(wzName[i]);
-                wzItfDetailed.setWzSspce(wzSspce[i]);
-                wzItfDetailed.setWzNumber(wzNumber[i]);
-                wzItfDetailed.setWzItfId(wzItf.getId());
-                int i1 = wzItfDetailedMapper.insertSelective(wzItfDetailed);
-                if (i1 <= 0) {
-                    return ResultMsg.failure("物资信息保存失败！请检查工单物资信息");
+        try {
+            int b = wzItfMapper.insertSelective(wzItf);
+            if (b <= 0) {
+                return ResultMsg.failure("工单保存失败！请检查工单录入信息");
+            }
+            //插入物资
+            String[] wzName = wzItf.getWzName(); //物资名称
+            String[] wzNumber = wzItf.getWzNumber();//物资数量
+            String[] wzSspce = wzItf.getWzSspce();//物资规格
+            String[] points = wzItf.getPoint();//物资规格
+            if (wzName != null && wzName.length > 0) {//当物资不为空的时候才记录物资信息
+                for (int i = 0; i < wzName.length; i++) {
+                    WzItfDetailed wzItfDetailed = new WzItfDetailed();
+                    wzItfDetailed.setWzName(wzName[i]);
+                    wzItfDetailed.setWzSspce(wzSspce[i]);
+                    wzItfDetailed.setWzNumber(wzNumber[i]);
+                    wzItfDetailed.setWzItfId(wzItf.getId());
+                    int i1 = wzItfDetailedMapper.insertSelective(wzItfDetailed);
+                    if (i1 <= 0) {
+                        return ResultMsg.failure("物资信息保存失败！请检查工单物资信息");
+                    }
                 }
             }
-        }
-        // 插入线路
-        Map<String, Object> map = new HashMap<>();
-        map.put("wzItfId", wzItf.getId());
-        map.put("pointNumber", points.length);
-        map.put("pointSlicer", 1);// 系统路线
-        for (int i = 0; i < points.length; i++) {
-            map.put("point" + (i + 1), points[i]);
-            // workLine.setPoint1(points[i]);
-            map.put("point" + (i + 1) + "Turnover", turnover[i]);
-            // workLine.setPoint1Turnover(turnover[i]);
-            //这里还要记录点与点之间的间隔时间 ，还要写逻辑处理
-            //workLine.setPoint1Time();
-        }
-        int i1 = wzWorkLineMapper.insertSelectiveMap(map);
-        if (i1 <= 0) {
-            //当插入成功后还要插入一条数据 来继续  人工 录入点位
-            map.clear();
-            map.put("pointSlicer", 2);
+            // 插入线路
+            Map<String, Object> map = new HashMap<>();
             map.put("wzItfId", wzItf.getId());
-            wzWorkLineMapper.insertSelectiveMap(map);
-            return ResultMsg.failure("物资路线点位保存失败！请检查工单物资路线点位信息");
+            map.put("pointNumber", points.length);
+            map.put("pointSlicer", 1);// 系统路线
+            for (int i = 0; i < points.length; i++) {
+                map.put("point" + (i + 1), points[i].split("→")[0]);
+                // workLine.setPoint1(points[i]);
+                map.put("point" + (i + 1) + "Turnover", points[i].split("→")[1]);
+                // workLine.setPoint1Turnover(turnover[i]);
+                //这里还要记录点与点之间的间隔时间 ，还要写逻辑处理
+                //workLine.setPoint1Time();
+            }
+            int i1 = wzWorkLineMapper.insertSelectiveMap(map);
+            if (i1 > 0) {
+                //当插入成功后还要插入一条数据 来继续  人工 录入点位
+                map.clear();
+                map.put("pointSlicer", 2);
+                map.put("wzItfId", wzItf.getId());
+                map.put("pointNumber", points.length);
+                int i = wzWorkLineMapper.insertSelectiveMap(map);
+                if (i < 0) {
+                    return ResultMsg.failure("物资路线点位保存失败！请检查工单物资路线点位信息");
+                }
+            }
+        } catch (Exception e) {
+            throw e;
         }
         return ResultMsg.success("工单保存成功");
     }

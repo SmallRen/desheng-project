@@ -2,11 +2,13 @@ package com.desheng.mapper;
 
 import com.desheng.pojo.WzItf;
 import com.desheng.pojo.WzItfExample;
-
-import java.util.List;
-
 import com.desheng.vo.WzItfVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public interface WzItfMapper {
     long countByExample(WzItfExample example);
@@ -20,6 +22,10 @@ public interface WzItfMapper {
     int insertSelective(WzItf record);
 
     List<WzItf> selectByExample(WzItfExample example);
+
+    @Select("select c.* from wz_itf t INNER join wz_workline c on c.wz_itf_id=t.id order by c.point_slicer ")
+    List<Map<String, Object>> selectByTimeOut();
+
 
     /**
      * 自己扩展

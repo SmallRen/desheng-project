@@ -1,5 +1,6 @@
 package com.desheng.service.impl;
 
+import com.desheng.mapper.NoticeMapper;
 import com.desheng.mapper.WzItfDetailedMapper;
 import com.desheng.mapper.WzItfMapper;
 import com.desheng.mapper.WzWorkLineMapper;
@@ -7,19 +8,27 @@ import com.desheng.pojo.*;
 import com.desheng.service.wzgd.WzItfService;
 import com.desheng.util.DateUtils;
 import com.desheng.util.ResultMsg;
+import com.desheng.util.StringUtils;
 import com.desheng.vo.WzItfVo;
-import org.springframework.beans.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service("wzItfService")
 public class WzItfServiceImpl implements WzItfService {
+    private static final Logger log = LoggerFactory.getLogger(WzItfServiceImpl.class);
+    @Autowired
+    NoticeMapper noticeMapper;
     @Autowired
     private WzItfMapper wzItfMapper;
     @Autowired
@@ -130,72 +139,72 @@ public class WzItfServiceImpl implements WzItfService {
         for (WzWorkLine wzWorkLine : wzWorkLines) {
             //如果只有一个点 直接结束循环
             if (wzWorkLine.getPoint1() != null && wzWorkLine.getPoint2() == null) {
-                str.append(wzWorkLine.getPoint1Turnover()+ ":" + wzWorkLine.getPoint1());
+                str.append(wzWorkLine.getPoint1Turnover() + ":" + wzWorkLine.getPoint1());
                 break;
             }
             if (wzWorkLine.getPoint2() != null) {//第一个点到第二个点的 间隔时间
-                str.append(wzWorkLine.getPoint1Turnover()+ ":" + wzWorkLine.getPoint1() + "→" +
-                        wzWorkLine.getPoint2Turnover()+ ":" + wzWorkLine.getPoint2() + " " + wzWorkLine.getPoint1Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint1Turnover() + ":" + wzWorkLine.getPoint1() + "→" +
+                        wzWorkLine.getPoint2Turnover() + ":" + wzWorkLine.getPoint2() + " " + wzWorkLine.getPoint1Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint3() != null) {
-                str.append(wzWorkLine.getPoint2Turnover()+ ":" + wzWorkLine.getPoint2() + "→" +
-                        wzWorkLine.getPoint3Turnover()+ ":" + wzWorkLine.getPoint3() + " " + wzWorkLine.getPoint2Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint2Turnover() + ":" + wzWorkLine.getPoint2() + "→" +
+                        wzWorkLine.getPoint3Turnover() + ":" + wzWorkLine.getPoint3() + " " + wzWorkLine.getPoint2Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint4() != null) {
-                str.append(wzWorkLine.getPoint3Turnover()+ ":" + wzWorkLine.getPoint3() + "→" +
-                        wzWorkLine.getPoint4Turnover()+ ":" + wzWorkLine.getPoint4() + " " + wzWorkLine.getPoint3Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint3Turnover() + ":" + wzWorkLine.getPoint3() + "→" +
+                        wzWorkLine.getPoint4Turnover() + ":" + wzWorkLine.getPoint4() + " " + wzWorkLine.getPoint3Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint5() != null) {
-                str.append(wzWorkLine.getPoint4Turnover()+ ":" + wzWorkLine.getPoint4() + "→" +
-                        wzWorkLine.getPoint5Turnover()+ ":" + wzWorkLine.getPoint5() + " " + wzWorkLine.getPoint4Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint4Turnover() + ":" + wzWorkLine.getPoint4() + "→" +
+                        wzWorkLine.getPoint5Turnover() + ":" + wzWorkLine.getPoint5() + " " + wzWorkLine.getPoint4Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint6() != null) {
-                str.append(wzWorkLine.getPoint5Turnover()+ ":" + wzWorkLine.getPoint5() + "→" +
-                        wzWorkLine.getPoint6Turnover()+ ":" + wzWorkLine.getPoint6() + " " + wzWorkLine.getPoint5Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint5Turnover() + ":" + wzWorkLine.getPoint5() + "→" +
+                        wzWorkLine.getPoint6Turnover() + ":" + wzWorkLine.getPoint6() + " " + wzWorkLine.getPoint5Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint7() != null) {
-                str.append(wzWorkLine.getPoint6Turnover()+ ":" + wzWorkLine.getPoint6() + "→" +
-                        wzWorkLine.getPoint7Turnover()+ ":" + wzWorkLine.getPoint7() + " " + wzWorkLine.getPoint6Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint6Turnover() + ":" + wzWorkLine.getPoint6() + "→" +
+                        wzWorkLine.getPoint7Turnover() + ":" + wzWorkLine.getPoint7() + " " + wzWorkLine.getPoint6Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint8() != null) {
-                str.append(wzWorkLine.getPoint7Turnover()+ ":" + wzWorkLine.getPoint7() + "→" +
-                        wzWorkLine.getPoint8Turnover()+ ":" + wzWorkLine.getPoint8() + " " + wzWorkLine.getPoint7Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint7Turnover() + ":" + wzWorkLine.getPoint7() + "→" +
+                        wzWorkLine.getPoint8Turnover() + ":" + wzWorkLine.getPoint8() + " " + wzWorkLine.getPoint7Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint9() != null) {
-                str.append(wzWorkLine.getPoint8Turnover()+ ":" + wzWorkLine.getPoint8() + "→" +
-                        wzWorkLine.getPoint9Turnover()+ ":" + wzWorkLine.getPoint9() + " " + wzWorkLine.getPoint8Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint8Turnover() + ":" + wzWorkLine.getPoint8() + "→" +
+                        wzWorkLine.getPoint9Turnover() + ":" + wzWorkLine.getPoint9() + " " + wzWorkLine.getPoint8Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint10() != null) {
-                str.append(wzWorkLine.getPoint9Turnover()+ ":" + wzWorkLine.getPoint9() + "→" +
-                        wzWorkLine.getPoint10Turnover()+ ":" + wzWorkLine.getPoint10() + " " + wzWorkLine.getPoint9Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint9Turnover() + ":" + wzWorkLine.getPoint9() + "→" +
+                        wzWorkLine.getPoint10Turnover() + ":" + wzWorkLine.getPoint10() + " " + wzWorkLine.getPoint9Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint11() != null) {
-                str.append(wzWorkLine.getPoint10Turnover()+ ":" + wzWorkLine.getPoint10() + "→" +
-                        wzWorkLine.getPoint11Turnover()+ ":" + wzWorkLine.getPoint11() + " " + wzWorkLine.getPoint10Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint10Turnover() + ":" + wzWorkLine.getPoint10() + "→" +
+                        wzWorkLine.getPoint11Turnover() + ":" + wzWorkLine.getPoint11() + " " + wzWorkLine.getPoint10Time() + "分钟 ");
             } else {
                 break;
             }
             if (wzWorkLine.getPoint12() != null) {
-                str.append(wzWorkLine.getPoint11Turnover()+ ":" + wzWorkLine.getPoint11() + "→" +
-                        wzWorkLine.getPoint12Turnover()+ ":" + wzWorkLine.getPoint12() + " " + wzWorkLine.getPoint11Time() + "分钟 ");
+                str.append(wzWorkLine.getPoint11Turnover() + ":" + wzWorkLine.getPoint11() + "→" +
+                        wzWorkLine.getPoint12Turnover() + ":" + wzWorkLine.getPoint12() + " " + wzWorkLine.getPoint11Time() + "分钟 ");
             } else {
                 break;
             }
@@ -246,5 +255,55 @@ public class WzItfServiceImpl implements WzItfService {
             return wzItfVo;
         }
         return null;
+    }
+
+    @Override
+    public void executeTimeOut() {
+        List<Map<String, Object>> mapList = wzItfMapper.selectByTimeOut();
+        // 系统线路
+        Map<String, Object> systemMap = mapList.get(0);
+        // 人工线路
+        Map<String, Object> artificialMap = mapList.get(1);
+        // 获取系统工单人工线路当前需要扫描的点位数
+        Integer artificialPointNum = (Integer) artificialMap.get("point_number");
+        if (artificialPointNum != 1) {
+            int id = Integer.valueOf(systemMap.get("wz_itf_id").toString());
+            // 获取上一个点时间/点位
+            String preStr = (String) artificialMap.get("point" + (artificialPointNum - 1) + "_time");
+            String point = (String) artificialMap.get("point" + (artificialPointNum - 1));
+            String sysPoint = (String) systemMap.get("point" + artificialPointNum);
+            // 判断上一个点扫描时间不能为空
+            if (StringUtils.isNotBlank(preStr)) {
+                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date preDate = null;
+                try {
+                    preDate = spf.parse(preStr);
+                    int min = Integer.valueOf(systemMap.get("point" + artificialPointNum + "_time").toString()) * 60;
+                    Date nowDate = new Date();
+                    // 点位间隔时间
+                    int s = (int) ((nowDate.getTime() - preDate.getTime()) / 1000);
+                    // 比较
+                    if (s > min) {
+                        // 发送通知
+                        int count = noticeMapper.checkSendNotice(id, "point" + artificialPointNum);
+                        if (count == 0) {
+                            Notice notice = new Notice();
+                            notice.setWzItfId(id);
+                            notice.setPoint("point" + artificialPointNum);
+                            notice.setPushTime(new Date());
+                            notice.setContent("您的点位在" + point + "到" + "系统预设点" + sysPoint + "超时。" + "超时时间：" + (s - min) + "秒");
+                            noticeMapper.insertSelective(notice);
+                        }
+                    }
+                } catch (ParseException e) {
+                    log.error("获取工单{}点位扫描时间格式不正确", artificialMap.get("wz_itf_id"));
+                    e.printStackTrace();
+                }
+
+            }
+
+
+        }
+
     }
 }

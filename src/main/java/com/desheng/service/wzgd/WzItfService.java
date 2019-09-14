@@ -47,4 +47,9 @@ public interface WzItfService {
      * @return
      */
     WzItfVo queryWzItfById(Integer id);
+
+    /**
+     * 进行工单超时查询并发送超时消息
+     */
+    void executeTimeOut();
 }

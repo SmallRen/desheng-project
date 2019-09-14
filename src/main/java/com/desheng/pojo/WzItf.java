@@ -33,6 +33,8 @@ public class WzItf {
     private String worklineSys;//不要
 
     private String worklinePerson;//不要
+    private WzItfDetailed detailed;
+    private WzWorkLine line;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -248,5 +250,21 @@ public class WzItf {
 
     public void setPoint(String[] point) {
         this.point = point;
+    }
+
+    public WzItfDetailed getDetailed() {
+        return detailed;
+    }
+
+    public void setDetailed(WzItfDetailed detailed) {
+        this.detailed = detailed;
+    }
+
+    public WzWorkLine getLine() {
+        return line;
+    }
+
+    public void setLine(WzWorkLine line) {
+        this.line = line;
     }
 }

@@ -13,7 +13,7 @@
         </commentGenerator>
         <!-- 配置数据库链接信息 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/desheng"
+                        connectionURL="jdbc:mysql://192.168.1.122:3306/desheng"
                         userId="wulei"
                         password="123456">
         </jdbcConnection>
@@ -35,7 +35,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- table指定每个表的生成策略 -->
-        <table tableName="wz_point" domainObjectName="WzPoint"></table>
+        <table tableName="notice" domainObjectName="Notice"></table>
         <!--<table tableName="user" domainObjectName="User"></table>
         <table tableName="permission" domainObjectName="Permission"></table>
         <table tableName="role" domainObjectName="Role"></table>-->

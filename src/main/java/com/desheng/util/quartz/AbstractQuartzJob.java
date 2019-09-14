@@ -39,6 +39,7 @@ public abstract class AbstractQuartzJob implements Job {
             }
             after(context, sysJob, null);
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("任务执行异常  - ：", e);
             after(context, sysJob, e);
         }
